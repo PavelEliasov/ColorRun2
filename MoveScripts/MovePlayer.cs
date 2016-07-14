@@ -13,7 +13,9 @@ public class MovePlayer : MonoBehaviour {
     public enum Pallette {
         RGB,
         RYB,//Red Yellow Black
-        Yellow_Black
+        Yellow_Black,
+        YR,
+        Blue_Green
     }
     // Use this for initialization
     // public LayerMask whatIsGround;
@@ -67,16 +69,23 @@ public class MovePlayer : MonoBehaviour {
     Vector3 movement;
 
     MeshRenderer playerMesh;
+
+    Statistic stat;
     // public Material[] aMaterials;
     void Start() {
+        stat = new Statistic();
+      
+       // Debug.Log(Managers._gameManager.statistics[1].Time);
+        // Time.timeScale = 0.6f;
+       // Debug.Log(Managers._gameManager.LevelsComplete);
+      //  Debug.Log(Managers._audioManager.SoundEffectVolume);
 
-        Debug.Log(Managers._audioManager.SoundEffectVolume);
-
+     
         Smoke.SetActive(false);
         // DustParticle.SetActive(false);
         // _dustMaterial=
 
-
+        color = IdentifyColor(_CharacterMaterial.color);
         //  Debug.Log(_SmokeMaterial.color);
         ballDirect = BallDirection.forward;
 
@@ -93,10 +102,54 @@ public class MovePlayer : MonoBehaviour {
 
     }
 
+    void OnDestroy() {
+        stat.Time = 1;
+        stat.Stars = 2;
+        stat.Score = 50;
+
+        Managers._gameManager.Stats(1, stat);
+        Managers._gameManager.LevelsComplete = 1;
+
+     //   Debug.Log("Destroy");
+
+    }
+    string IdentifyColor(Color color) {
+        if (color.r > color.g && color.r > color.b) {
+
+            return Colors.Red;
+
+        }
+
+        if (color.g > color.r && color.g > color.b && color.g - color.r > 0.2f) {
+
+            return Colors.Green;
+
+        }
+
+        if (color.b > color.g && color.b > color.r) {
+
+            return Colors.Blue;
+
+        }
+
+        if (color.b < 0.1f && color.g < 0.1f && color.r < 0.1f) {
+
+            return Colors.Black;
+
+        }
+        if (color.g - color.r < 0.2f) {
+
+            return Colors.Yellow;
+
+        }
+        return Colors.Yellow;
+
+    }
+
     // Update is called once per frame
     void Update() {
-
-        acceleration.text = Input.acceleration.x.ToString();
+       // Debug.Log(Managers._gameManager);
+        //acceleration.text = Input.acceleration.x.ToString();
 
         if ((_charcontroller.isGrounded && jump == true) || doubleJump==true) { // ||  (grounded == true && Input.GetKeyDown(KeyCode.Space))) {
             if (doubleJump==true) {
@@ -111,12 +164,12 @@ public class MovePlayer : MonoBehaviour {
             animator.SetBool("Jump",true);
           //  DustParticle.SetActive(false);
             Smoke.SetActive(true);
-          //  Time.timeScale = 0.7f;
+           // Time.timeScale = 0.8f;
             StartCoroutine(ReturnTimeScale());
             grounded = false;
 
           
-            startPos = playerTrans.position;
+           // startPos = playerTrans.position;
             ballDirect = BallDirection.forward;
 
             _verticalSpeed = _jumpForce;
@@ -125,25 +178,25 @@ public class MovePlayer : MonoBehaviour {
         }
     
 
-        if (Input.GetAxis("Horizontal")<-0.5f && jump==true || Input.acceleration.x<-0.15f && jump==true) {
-            jump = false;
-          //  Time.timeScale = 0.7f;
-            StartCoroutine(ReturnTimeScale());
+        //if (Input.GetAxis("Horizontal")<-0.5f && jump==true || Input.acceleration.x<-0.15f && jump==true) {
+        //    jump = false;
+        //  //  Time.timeScale = 0.7f;
+        //  //  StartCoroutine(ReturnTimeScale());
           
-            playerTrans.transform.DOMoveX(Mathf.Round( playerTrans.position.x-1),1f);
-            ballDirect = BallDirection.left;
-        }
+        //    playerTrans.transform.DOMoveX(Mathf.Round( playerTrans.position.x-1),1f);
+        //    ballDirect = BallDirection.left;
+        //}
 
-        if (Input.GetAxis("Horizontal") > 0.5f && jump==true || Input.acceleration.x > 0.15f && jump == true) {
-            jump = false;
-           // Time.timeScale = 0.7f;
-            StartCoroutine(ReturnTimeScale());
-            playerTrans.transform.DOMoveX(Mathf.Round(playerTrans.position.x + 1), 1f);
-            ballDirect = BallDirection.right;
-        }
+        //if (Input.GetAxis("Horizontal") > 0.5f && jump==true || Input.acceleration.x > 0.15f && jump == true) {
+        //    jump = false;
+        //   // Time.timeScale = 0.7f;
+        //  //  StartCoroutine(ReturnTimeScale());
+        //    playerTrans.transform.DOMoveX(Mathf.Round(playerTrans.position.x + 1), 1f);
+        //    ballDirect = BallDirection.right;
+        //}
 
         if (_charcontroller.isGrounded == false) {
-            _verticalSpeed += _gravity * 2 * Time.deltaTime;
+            _verticalSpeed += _gravity *2 * Time.deltaTime;
             _fallingForce += Time.deltaTime;
 
           //  Debug.Log(_fallingForce);
@@ -159,7 +212,7 @@ public class MovePlayer : MonoBehaviour {
         movement *= Time.deltaTime;
         _charcontroller.Move(movement);
 
-        if (playerTrans.position.y>=2.5f) {
+        if (_fallingForce>=0.3f) {
             Smoke.SetActive(false);
            // Debug.Log("Stop Smoke");
         }
@@ -185,6 +238,8 @@ public class MovePlayer : MonoBehaviour {
       
     }
     void OnTriggerEnter(Collider other) {
+       // Managers._gameManager.LevelsComplete = 3;
+      //  Debug.Log(Managers._gameManager.LevelsComplete);
 
         Debug.Log("TriggerEnter");
         if (other.gameObject.tag=="Ground") {
@@ -226,7 +281,7 @@ public class MovePlayer : MonoBehaviour {
         }
      
        
-        Messenger.Broadcast("CameraRotate");
+     //   Messenger.Broadcast("CameraRotate");
         
 
     }
@@ -234,17 +289,35 @@ public class MovePlayer : MonoBehaviour {
     void ChangeColor() {
         int rand = Random.Range(1, 4);
 
-        if (_pallette==Pallette.RGB) {
-             rand = Random.Range(1, 4);
-        }
-        if (_pallette == Pallette.RYB) {
-             rand = Random.Range(3, 6);
-        }
-        if (_pallette==Pallette.Yellow_Black) {
-            rand = Random.Range(4, 6);
+        //if (_pallette==Pallette.RGB) {
+        //     rand = Random.Range(1, 4);
+        //}
+        //if (_pallette == Pallette.RYB) {
+        //     rand = Random.Range(3, 6);
+        //}
+        //if (_pallette==Pallette.Yellow_Black) {
+        //    rand = Random.Range(4, 6);
+        //}
+
+        switch (_pallette) { 
+            case Pallette.RGB:
+                rand = Random.Range(1, 4);
+                break;
+            case Pallette.RYB:
+                rand = Random.Range(3, 6);
+                break;
+            case Pallette.Yellow_Black:
+                rand = Random.Range(4, 6);
+                break;
+            case Pallette.YR:
+                rand = RandomValue(new int [2]{ 3,5});
+                break;
+            case Pallette.Blue_Green:
+                rand = Random.Range(1, 3);
+                break;
         }
        
-
+       
         switch (rand) {
           
             case 1:
@@ -293,10 +366,15 @@ public class MovePlayer : MonoBehaviour {
 
     }
 
+    int RandomValue(int [] values) {
+
+        return values[UnityEngine.Random.Range(0,values.Length)];
+    }
+
 
 
     IEnumerator ReturnTimeScale() {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.7f);
         Time.timeScale = 1f;
 
     }
@@ -330,8 +408,8 @@ public class MovePlayer : MonoBehaviour {
         if (_charcontroller.isGrounded) {
             return;
         }
-        var ball = Instantiate(PaintBall, playerTrans.position, Quaternion.identity) as GameObject;
-        ball.GetComponent<PaintBall>().ChangeColor(color, colorName, ballDirect, startPos);
+        var ball = Instantiate(PaintBall, playerTrans.position+Vector3.forward*0.5f, Quaternion.identity) as GameObject;
+        ball.GetComponent<PaintBall>().ChangeColor(color, colorName, ballDirect, playerTrans.position);
     }
 
     public void Startagain() {
@@ -340,5 +418,9 @@ public class MovePlayer : MonoBehaviour {
 
       //  Debug.Log(StateManager.playerPos);
         SceneManager.LoadScene("1");
+    }
+
+    public void GoToMenu() {
+        SceneManager.LoadScene("Menu");
     }
 }

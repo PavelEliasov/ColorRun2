@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioManager))]
+[RequireComponent(typeof(GameManager))]
 public class Managers : MonoBehaviour {
+   // UnityEngine.Object[] amanagers;
+   
     //static Managers _instance;
     //public static Managers Instance {
     //    get {
@@ -22,24 +25,53 @@ public class Managers : MonoBehaviour {
 
 
     public static AudioManager _audioManager { get; private set; }
-
+    public static GameManager _gameManager; //{ get;private set; }
 
 
     List<IGameManager> managers;
     // Use this for initialization
+    void Reset() {
 
+        Debug.Log("Reset");
+    }
     void Awake() {
-        if (FindObjectsOfType<Managers>().Length>1) {
+        //   amanagers = new List<Object>();
+        //   
+        if (FindObjectsOfType<Managers>().Length > 1) {
+            this.gameObject.SetActive(false);
             Destroy(this.gameObject);
+           // Destroy(_gameManager);
+            // amanagers.Add(FindObjectsOfType<Managers>()[0]);
+            //if (FindObjectsOfType<Managers>()[0].gameObject.GetHashCode() != this.gameObject.GetHashCode()) {
+            //    Destroy(FindObjectsOfType<Managers>()[1].gameObject);
+            //}
+            //else {
+            //    Destroy(FindObjectsOfType<Managers>()[0].gameObject);
+            //}
+            // Destroy(FindObjectsOfType<Managers>()[0].gameObject);
+            //  Debug.Log(this.gameObject.GetHashCode());
+            //  Debug.Log(FindObjectsOfType<Managers>()[0].gameObject.GetHashCode());
+            //  Debug.Log(FindObjectsOfType<Managers>()[1].gameObject.GetHashCode());
+
+            // FindObjectsOfType<Managers>();
+            //  Destroy(this.gameObject);
         }
-        managers = new List<IGameManager>();
-        _audioManager = GetComponent<AudioManager>();
+        else {
+            managers = new List<IGameManager>();
+            _gameManager = GetComponent<GameManager>();
+            _audioManager = GetComponent<AudioManager>();
+            //  Debug.Log(_gameManager.LevelsComplete);
+            // Debug.Log(_audioManager);
 
-       // Debug.Log(_audioManager);
+            managers.Add(_audioManager);
+            StartCoroutine(StartUpManagers());
+            DontDestroyOnLoad(this.gameObject);
 
-        managers.Add(_audioManager);
-        StartCoroutine(StartUpManagers());
-        DontDestroyOnLoad(this.gameObject);
+        }
+     
+
+        Debug.Log(_audioManager);
+        Debug.Log(_gameManager);
     }
 
     IEnumerator StartUpManagers() {
@@ -63,16 +95,22 @@ public class Managers : MonoBehaviour {
     }
 	void Start () {
 
-       // Debug.Log("Start");
+        // Debug.Log("Start");
+
+      // Debug.Log(_gameManager.LevelsComplete);
 	}
+    void OnEnable() {
+     //  Debug.Log(_gameManager.LevelsComplete);
+    }
+    void OnDestroy() {
+       // Debug.Log(_gameManager.LevelsComplete);
+       // Debug.Log("DestroyManager");
+    }
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
 
-    public void LoadScene() {
-        _audioManager.SoundEffectVolume = 0.9f;
-        SceneManager.LoadScene("1");
-    }
+  
 }

@@ -230,6 +230,8 @@ public class PlatformScript : MonoBehaviour {
 
             Debug.Log(colorOfPlatform);
 
+           // Debug.Log(player.GetComponent<MovePlayer>().color);
+
             Dust.Instance.gameObject.SetActive(true);
             Dust.Instance.gameObject.transform.position = _playerTrans.position + Vector3.forward / 2;
             Dust.Instance._dustMaterial.SetColor("_Color", _platformMeshRend.material.color);
@@ -242,7 +244,7 @@ public class PlatformScript : MonoBehaviour {
             else {
                 SceneController.Instance.ChangeScore(-5);
                 SceneController.Instance.RemoveLife();
-                // Debug.Log("Colors not Equal");
+               //  Debug.Log("Colors not Equal");
             }
         }
 

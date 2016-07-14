@@ -19,19 +19,21 @@ public class PaintBall : MonoBehaviour {
     Rigidbody paintballRigigdbody;
 
     BallDirection fallingDirection;
+    Sequence fall;
+
     // Use this for initialization
     void Awake() {
 
         paintBallMeshRend = GetComponent<MeshRenderer>();
         paintBallTransform = GetComponent<Transform>();
         paintballRigigdbody = GetComponent<Rigidbody>();
-        Debug.Log("Awake");
+      //  Debug.Log("Awake");
     }
 
     void Start () {
-      
+       fall = DOTween.Sequence();
 
- }
+  }
 	
 	// Update is called once per frame
 	void Update () {
@@ -76,17 +78,23 @@ public class PaintBall : MonoBehaviour {
         switch (direct) {
             case BallDirection.left:
                 paintBallTransform.DOMoveX(startpos.x-1,0.5f);
-               
+
+                Debug.Log("LeftDirection");
                 break;
             case BallDirection.right:
                 paintBallTransform.DOLocalMoveX(startpos.x+1, 0.5f);
+                Debug.Log("RightDirection");
                 break;
             case BallDirection.forward:
+
+                Debug.Log("ForwardDirection");
                 break;
 
         }
-        paintBallTransform.DOMoveZ(startpos.z + 8, 0.5f);
-        paintBallTransform.DOMoveY(startpos.y -20, 4f);
+        //fall.Append(paintBallTransform.DOMoveZ(startpos.z + 6, 0.6f));
+        //fall.Join(paintBallTransform.DOMoveY(startpos.y - 15, 4f));
+        paintBallTransform.DOMoveZ(startpos.z +8, 1f);
+        paintBallTransform.DOMoveY(startpos.y -15, 4f);
        // paintballRigigdbody.AddForce(Vector3.forward*1000+Vector3.down*500);
 
     }
