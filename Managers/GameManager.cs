@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
    public int _levelsComplete;
+    public int sceneNumber;
     public int LevelsComplete {
         get {
             return _levelsComplete;
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour {
 
     public void Stats(int scene,Statistic stats) {
         _levelsComplete = scene;
+       
         if (statistics.ContainsKey(scene)) {
             if (stats.Stars>statistics[scene].Stars) {
                 statistics[scene].Stars = stats.Stars;

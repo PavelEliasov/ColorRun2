@@ -56,13 +56,44 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
     MoveSlide _slideForScale;
     MoveSlide _slideForUnscale;
     // Use this for initialization
+    int[] testarray;
     public enum Orientation {
         vertical,
         horizontal
     }
-  
-    void Start () {
 
+    float[] ReversArray( float [] a) {
+        float[] b = new float[a.Length];
+        for (int i=0;i<a.Length;++i) {
+            if (i == a.Length - 1) {
+                b[0] = a[i];
+            }
+            else {
+            //    Debug.Log(b[i]);
+                b[i+1] = a[i];           
+            }
+           
+        }
+        return b;
+
+    }
+    void Start () {
+        //testarray = new int[8];
+        //for (int i=0;i<testarray.Length;++i) {
+        //    testarray[i] = i;
+        //}
+      
+      
+        //for (byte i = 0; i <4; ++i) {
+
+        // // testarray = ReversArray(testarray);
+        //}
+
+        //for (int i = 0; i < testarray.Length; ++i) {
+        
+        //    Debug.Log(testarray[i]);
+        //}
+        //  Debug.Log(Mathf.RoundToInt(9f/2));
         Slides = new List<MoveSlide>();
         foreach (GameObject image in images) {
             image.AddComponent<MoveSlide>();
@@ -98,8 +129,6 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
                 LastSlidePosition = new Vector3(middle_slide_position.localPosition.x + imagestep * (images.Length / 2 - 1),
                                                      middle_slide_position.localPosition.y,
                                                      middle_slide_position.localPosition.z);
-               // imageTransforms[images.Length / 2].localScale = Vector3.one * 1.2f;
-                //SelectedItem(images.Length / 2);
             }
             else {
 
@@ -109,14 +138,11 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
                 LastSlidePosition = new Vector3(middle_slide_position.localPosition.x + imagestep * Mathf.RoundToInt(images.Length / 2),
                                                     middle_slide_position.localPosition.y,
                                                     middle_slide_position.localPosition.z);
-               // imageTransforms[Mathf.RoundToInt(images.Length / 2)].localScale = Vector3.one * 1.2f;
-                
-
             }
           //  Debug.Log(middle_slide_position.localPosition);
             imageTransforms[0].localPosition = firstSlidePosition;
-            imageTransforms[0].localScale = Vector3.one * 1.2f;
-            SelectedItem(0);
+           
+            
           
             aimagepositions[0] = firstSlidePosition.x;
             imagepos = firstSlidePosition;
@@ -131,45 +157,60 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
               
             }
 
-            
+            if (Managers._gameManager.sceneNumber> Mathf.RoundToInt(images.Length / 2)) {
+                for (byte i = 0; i < Mathf.Abs(Mathf.RoundToInt(images.Length / 2) - Managers._gameManager.sceneNumber); i++) {
 
-            if (images.Length % 2 == 0) {
-                for (byte i = 0; i < images.Length; ++i) {
-                    if (i < images.Length / 2) {
-                        imageTransforms[i].localPosition = new Vector3(aimagepositions[i + images.Length / 2],
-                                                                       imageTransforms[i].localPosition.y, imageTransforms[i].localPosition.z);
-                    }
-                    else {
-                        imageTransforms[i].localPosition = new Vector3(aimagepositions[i - images.Length / 2],
-                                                                      imageTransforms[i].localPosition.y, imageTransforms[i].localPosition.z);
-                    }
-
+                    aimagepositions = ReversArray(aimagepositions);
                 }
-                move_left_step = images.Length / 2;
+                move_left_step = Mathf.Abs(Mathf.RoundToInt(images.Length / 2) - Managers._gameManager.sceneNumber);
+            }
+            if (Managers._gameManager.sceneNumber < Mathf.RoundToInt(images.Length / 2)) {
+                for (byte i = 0; i < images.Length - Mathf.Abs(Mathf.RoundToInt(images.Length / 2) - Managers._gameManager.sceneNumber); i++) {
+
+                    aimagepositions = ReversArray(aimagepositions);
+                }
+                move_left_step = images.Length - Mathf.Abs(Mathf.RoundToInt(images.Length / 2) - Managers._gameManager.sceneNumber);
+            }
+          
+            for (byte i = 0; i < images.Length; ++i) {
+
+                imageTransforms[i].localPosition = new Vector3(aimagepositions[i], imageTransforms[i].localPosition.y, imageTransforms[i].localPosition.z);
 
             }
-            else {
-                for (byte i = 0; i < images.Length; ++i) {
-                    if (i <= Mathf.RoundToInt(images.Length / 2)) {
-                        imageTransforms[i].localPosition = new Vector3(aimagepositions[i + Mathf.RoundToInt(images.Length / 2)],
-                                                                       imageTransforms[i].localPosition.y, imageTransforms[i].localPosition.z);
-                    }
-                    else {
-                        imageTransforms[i].localPosition = new Vector3(aimagepositions[i - Mathf.RoundToInt(images.Length / 2 + 1)],
-                                                                      imageTransforms[i].localPosition.y, imageTransforms[i].localPosition.z);
-                    }
+           
+           //if (move_right_step > images.Length) {
+           //     move_right_step =move_right_step-images.Length+1;
+           //     //move_right_step = 0;
+           // }
 
-                }
-                move_left_step = Mathf.RoundToInt(images.Length / 2);
+            imageTransforms[Managers._gameManager.sceneNumber].localScale = Vector3.one * 1.2f;
+            Debug.Log(Managers._gameManager.sceneNumber);
+
+            Debug.Log(move_left_step);
+            SelectedItem(Managers._gameManager.sceneNumber);
+            //if (images.Length % 2 == 0) {
+
+            //    for (byte i = 0; i < images.Length - Managers._gameManager.sceneNumber - Mathf.RoundToInt(images.Length / 2); ++i) {
+
+            //    }
+            //    move_left_step = images.Length / 2;
+
+            //}
+            //else {
+            //    for (byte i = 0; i < images.Length; ++i) {
 
 
-            }
+            //    }
+            //    move_left_step = Mathf.RoundToInt(images.Length / 2);
+
+
+            //}
 
             for (byte i = 0; i < images.Length; ++i) {
                 aimagepositions[i] = imageTransforms[i].localPosition.x;
 
             }
-          
+           // Array.Sort(,);
 
         }
         #endregion
@@ -743,10 +784,6 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
     }
 
     public void OnPointerClick(PointerEventData eventData) {
-        //if (Input.mousePosition.x < middle_slide_position.position.x) {
-        //    left = true;
-        //}
-
-        //Debug.Log("UpLeft");
+       
     }
 }

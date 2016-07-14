@@ -43,7 +43,7 @@ public class SceneController : MonoBehaviour {
 	}
 
     void OnDestroy() {
-       // LevelComplete();
+        Managers._gameManager.sceneNumber = sceneNumber+7;
     }
 
     public void ChangeScore(float value) {

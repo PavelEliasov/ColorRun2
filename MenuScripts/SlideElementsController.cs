@@ -13,7 +13,7 @@ public class SlideElementsController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        Debug.Log(Managers._gameManager.LevelsComplete);
+     //   Debug.Log(Managers._gameManager.LevelsComplete);
         playButton.SetActive(false);
         if (Managers._gameManager.LevelsComplete==unlockLimit) {
             _lock.enabled =false;
