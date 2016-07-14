@@ -12,7 +12,7 @@ public class CameraFallow : MonoBehaviour {
         cameraTrans = GetComponent<Transform>();
         cameraTrans.position = GetComponent<Transform>().position;
 
-        Debug.Log(cameraTrans.position);
+       // Debug.Log(cameraTrans.position);
 	}
 	
 	// Update is called once per frame

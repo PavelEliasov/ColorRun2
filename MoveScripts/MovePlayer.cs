@@ -103,12 +103,12 @@ public class MovePlayer : MonoBehaviour {
     }
 
     void OnDestroy() {
-        stat.Time = 1;
-        stat.Stars = 2;
-        stat.Score = 50;
+        //stat.Time = 1;
+        //stat.Stars = 2;
+        //stat.Score = 50;
 
-        Managers._gameManager.Stats(1, stat);
-        Managers._gameManager.LevelsComplete = 1;
+        //Managers._gameManager.Stats(1, stat);
+        //Managers._gameManager.LevelsComplete = 1;
 
      //   Debug.Log("Destroy");
 
@@ -148,6 +148,9 @@ public class MovePlayer : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+       
+
+      //  Debug.Log(stat.Stars);
        // Debug.Log(Managers._gameManager);
         //acceleration.text = Input.acceleration.x.ToString();
 
@@ -238,10 +241,17 @@ public class MovePlayer : MonoBehaviour {
       
     }
     void OnTriggerEnter(Collider other) {
-       // Managers._gameManager.LevelsComplete = 3;
-      //  Debug.Log(Managers._gameManager.LevelsComplete);
+        // Managers._gameManager.LevelsComplete = 3;
+        //  Debug.Log(Managers._gameManager.LevelsComplete);
 
-        Debug.Log("TriggerEnter");
+        // Debug.Log(other.gameObject.tag);
+        // Debug.Log("TriggerEnter");
+        if (other.gameObject.tag == "Star") {
+            SceneController.Instance.stats.Stars++;
+            //stat.Stars++;
+            Destroy(other.gameObject);
+        }
+
         if (other.gameObject.tag=="Ground") {
             _audioController.PlayOneShot(groundedSounds[Random.Range(0,groundedSounds.Length)],Managers._audioManager.SoundEffectVolume*0.2f*_fallingForce);
             _fallingForce = 0;

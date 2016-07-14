@@ -10,12 +10,13 @@ public class SceneController : MonoBehaviour {
     [SerializeField]
     Image[] lifeImages;
 
+    public Statistic stats;//=new Statistic();
 
     float _score;
     float _starcount;
     int _lifecount=3;
 
-   
+    int sceneNumber;
 
     public static SceneController Instance {
         get  {
@@ -29,13 +30,21 @@ public class SceneController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-	
-	}
+         int.TryParse(SceneManager.GetActiveScene().name,out sceneNumber);
+         stats = new Statistic();
+
+       // Debug.Log(SceneManager.GetActiveScene().name);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+      //  Debug.Log(stats.Stars);
 	}
+
+    void OnDestroy() {
+       // LevelComplete();
+    }
 
     public void ChangeScore(float value) {
         _score += value;
@@ -59,5 +68,18 @@ public class SceneController : MonoBehaviour {
     }
     public void Die() {
         SceneManager.LoadScene("1");
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (other.gameObject.tag=="Player") {
+            LevelComplete();
+            SceneManager.LoadScene("Menu");
+        }
+       
+    }
+     void LevelComplete() {
+        Managers._gameManager.Stats(sceneNumber, stats);
+      //  Managers._gameManager.LevelsComplete = 1;
+
     }
 }
