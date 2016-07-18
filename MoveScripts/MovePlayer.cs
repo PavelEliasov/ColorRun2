@@ -86,7 +86,7 @@ public class MovePlayer : MonoBehaviour {
         // _dustMaterial=
 
         color = IdentifyColor(_CharacterMaterial.color);
-        //  Debug.Log(_SmokeMaterial.color);
+         Debug.Log(color);
         ballDirect = BallDirection.forward;
 
         animator = GetComponent<Animator>();
@@ -247,7 +247,7 @@ public class MovePlayer : MonoBehaviour {
         // Debug.Log(other.gameObject.tag);
         // Debug.Log("TriggerEnter");
         if (other.gameObject.tag == "Star") {
-            SceneController.Instance.stats.Stars++;
+            SceneController.Instance.stats.Banks++;
             //stat.Stars++;
             Destroy(other.gameObject);
         }

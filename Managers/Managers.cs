@@ -39,6 +39,7 @@ public class Managers : MonoBehaviour {
         //   
         if (FindObjectsOfType<Managers>().Length > 1) {
             this.gameObject.SetActive(false);
+            this.gameObject.GetComponent<GameManager>().enabled = false;
             Destroy(this.gameObject);
            // Destroy(_gameManager);
             // amanagers.Add(FindObjectsOfType<Managers>()[0]);

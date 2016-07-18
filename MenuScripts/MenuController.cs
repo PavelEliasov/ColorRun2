@@ -16,7 +16,7 @@ public class MenuController : MonoBehaviour {
 
     public void LoadScene() {
         Managers._audioManager.SoundEffectVolume = 0.9f;
-        SceneManager.LoadScene("1");
+        SceneManager.LoadScene(Managers._gameManager._selectedScene.ToString());
     }
     public void TestClick() {
 

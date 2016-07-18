@@ -26,7 +26,7 @@ public class StarAnimate : MonoBehaviour {
         while (true) {
             // starTrans.DOShakeRotation(5f,Vector3.up*10,5,0,false);
             // starTrans.DOShakeScale(2f, new Vector3(1,1,0), 0, 0,true);
-            starTrans.DOPunchPosition(Vector3.up*0.2f,5f,1,0,false);
+            starTrans.DOPunchPosition(Vector3.up*0.5f,5f,1,0,false);
             yield return new WaitForSeconds(5f);
         }
 

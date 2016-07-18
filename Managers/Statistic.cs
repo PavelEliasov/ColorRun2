@@ -1,10 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Statistic : MonoBehaviour {
+[System.Serializable]
+public class Statistic  {
+    [SerializeField]
     float _time;
+    [SerializeField]
+    float _bank;
+    [SerializeField]
     float _stars;
-    float _score;
+   
+    [SerializeField]
     public float Time {
         get {
             return _time;
@@ -15,23 +21,23 @@ public class Statistic : MonoBehaviour {
         }
     }
 
-    public float Stars  {
+    public float Banks  {
         get  {
+            return _bank;
+        }
+
+        set {
+            _bank = value;
+        }
+    }
+
+    public float Stars   {
+        get {
             return _stars;
         }
 
         set {
             _stars = value;
-        }
-    }
-
-    public float Score   {
-        get {
-            return _score;
-        }
-
-        set {
-            _score = value;
         }
     }
 

@@ -162,6 +162,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
 
                     aimagepositions = ReversArray(aimagepositions);
                 }
+               
                 move_left_step = Mathf.Abs(Mathf.RoundToInt(images.Length / 2) - Managers._gameManager.sceneNumber);
             }
             if (Managers._gameManager.sceneNumber < Mathf.RoundToInt(images.Length / 2)) {
@@ -184,9 +185,10 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
            // }
 
             imageTransforms[Managers._gameManager.sceneNumber].localScale = Vector3.one * 1.2f;
-            Debug.Log(Managers._gameManager.sceneNumber);
+            imageTransforms[Managers._gameManager.sceneNumber].SetAsLastSibling();
+          //  Debug.Log(Managers._gameManager.sceneNumber);
 
-            Debug.Log(move_left_step);
+           // Debug.Log(move_left_step);
             SelectedItem(Managers._gameManager.sceneNumber);
             //if (images.Length % 2 == 0) {
 
@@ -268,7 +270,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
             }
             if (left == true) {
 
-             Debug.Log("Moveleft");
+          //   Debug.Log("Moveleft");
                 MoveLeft();
             }
 
@@ -294,7 +296,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
     }
     public void MoveLeftButton() {
         if (right == true) return;
-        Debug.Log(move_right_step);
+      //  Debug.Log(move_right_step);
         left = true;
         //right = !right;
     }
@@ -314,7 +316,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
             foreach (MoveSlide slide in Slides) {
                
 
-                Debug.Log(middle_slide_position.localPosition.x - imageTransforms[ii].localPosition.x);
+             //   Debug.Log(middle_slide_position.localPosition.x - imageTransforms[ii].localPosition.x);
                 if (middle_slide_position.localPosition.x - imageTransforms[ii].localPosition.x <= imagestep && middle_slide_position.localPosition.x - imageTransforms[ii].localPosition.x > 0) {
                     imageTransforms[ii].SetAsLastSibling();
                     slide.Scale(Vector3.one * 1.4f);
@@ -333,10 +335,10 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
 
        
 
-        Debug.Log("R");
+      //  Debug.Log("R");
         if (imageTransforms[0].localPosition.x == aimagepositions[0] + imagestep) {//chek position if position more than this pos + step
 
-            Debug.Log("Moveright");
+         //   Debug.Log("Moveright");
             foreach (MoveSlide slide in Slides) {
 
                 slide.StopAllTweens();
@@ -398,7 +400,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
             slideAllMove = false;
         }
 
-        Debug.Log("L");
+      //  Debug.Log("L");
 
 
         if (imageTransforms[0].localPosition.x == aimagepositions[0] - imagestep) {
@@ -780,7 +782,9 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
 
     void SelectedItem(int i) {
         ElementNumber = i;
-        Selected_Item_Number.text = ElementNumber.ToString();
+       
+        Managers._gameManager._selectedScene = i;
+        Selected_Item_Number.text = Managers._gameManager._selectedScene.ToString();
     }
 
     public void OnPointerClick(PointerEventData eventData) {

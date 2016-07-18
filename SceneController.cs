@@ -10,7 +10,18 @@ public class SceneController : MonoBehaviour {
     [SerializeField]
     Image[] lifeImages;
 
+    [SerializeField]
+   public int firstStarPrice;
+    [SerializeField]
+   public int secondStarPrice;
+    [SerializeField]
+   public int thirdStarPrice;
+
+    [HideInInspector]
     public Statistic stats;//=new Statistic();
+
+    [SerializeField]
+    GameObject endOfLevelPanel;
 
     float _score;
     float _starcount;
@@ -32,18 +43,19 @@ public class SceneController : MonoBehaviour {
     void Start () {
          int.TryParse(SceneManager.GetActiveScene().name,out sceneNumber);
          stats = new Statistic();
-
-       // Debug.Log(SceneManager.GetActiveScene().name);
+        StartCoroutine(Timer());
+       Debug.Log(SceneManager.GetActiveScene().name);
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-      //  Debug.Log(stats.Stars);
+     //   Debug.Log(stats.Time);
+        //Debug.Log(stats.Stars);
 	}
 
     void OnDestroy() {
-        Managers._gameManager.sceneNumber = sceneNumber+7;
+        Managers._gameManager.sceneNumber = sceneNumber;
     }
 
     public void ChangeScore(float value) {
@@ -54,10 +66,10 @@ public class SceneController : MonoBehaviour {
     }
 
     public void RemoveLife() {
-        lifeImages[_lifecount].enabled = false;
+        lifeImages[_lifecount-1].enabled = false;
         _lifecount--;
 
-        if (_lifecount<0) {
+        if (_lifecount==0) {
              Die();
         }
         
@@ -73,13 +85,47 @@ public class SceneController : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag=="Player") {
             LevelComplete();
-            SceneManager.LoadScene("Menu");
+          
         }
        
     }
      void LevelComplete() {
+        CountStars();
         Managers._gameManager.Stats(sceneNumber, stats);
-      //  Managers._gameManager.LevelsComplete = 1;
+        endOfLevelPanel.SetActive(true);
+        Debug.Log(stats.Stars);
+      //  SceneManager.LoadScene("Menu");
+
+        StopCoroutine(Timer());
+      //  StartCoroutine(UnloadScene());
+        //  Managers._gameManager.LevelsComplete = 1;
+
+    }
+
+    void CountStars() {
+        if (stats.Banks>=firstStarPrice) {
+            stats.Stars++;
+        }
+        if (stats.Banks>=secondStarPrice) {
+            stats.Stars++;
+        }
+        if (stats.Banks>=thirdStarPrice) {
+            stats.Stars++;
+        }
+
+    }
+
+    IEnumerator UnloadScene() {
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene("Menu");
+
+    }
+    IEnumerator Timer() {
+        yield return null;
+        while (true) {
+            stats.Time += 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
 
     }
 }

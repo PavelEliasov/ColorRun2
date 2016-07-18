@@ -228,7 +228,7 @@ public class PlatformScript : MonoBehaviour {
 
         if (other.gameObject.tag == "Player") {
 
-            Debug.Log(colorOfPlatform);
+          //  Debug.Log(colorOfPlatform);
 
            // Debug.Log(player.GetComponent<MovePlayer>().color);
 
@@ -239,12 +239,12 @@ public class PlatformScript : MonoBehaviour {
 
             if (player.color == colorOfPlatform) {
                 SceneController.Instance.ChangeScore(10);
-                //  Debug.Log("Equal Of Colors");
+                  Debug.Log("Equal Of Colors");
             }
             else {
                 SceneController.Instance.ChangeScore(-5);
                 SceneController.Instance.RemoveLife();
-               //  Debug.Log("Colors not Equal");
+                 Debug.Log("Colors not Equal");
             }
         }
 
