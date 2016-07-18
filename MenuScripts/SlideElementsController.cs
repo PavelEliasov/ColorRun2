@@ -14,14 +14,21 @@ public class SlideElementsController : MonoBehaviour {
     [SerializeField]
     Text time;
     [SerializeField]
-    Text stars;
+    Text banks;
+    [SerializeField]
+    Image firstStar;
+    [SerializeField]
+    Image secondStar;
+    [SerializeField]
+    Image thirdStar;
 
     bool interactable;
     // Use this for initialization
     void Start () {
 
-        // Debug.Log(Managers._gameManager.LevelsComplete);
+        //  Debug.Log(Managers._gameManager.statistics[1].Time);
 
+      //  Debug.Log(sceneNumber);
         DisableElements();
         
         if (Managers._gameManager.LevelsComplete>=unlockLimit) {
@@ -31,9 +38,26 @@ public class SlideElementsController : MonoBehaviour {
             Debug.Log(Managers._gameManager.statistics.ContainsKey(sceneNumber));
             if (Managers._gameManager.statistics.ContainsKey(sceneNumber)) {
 
-             //   Debug.Log(Managers._gameManager.statistics[sceneNumber].Stars);
-               stars.text ="X"+" "+ Managers._gameManager.statistics[sceneNumber].Banks.ToString();
+                Debug.Log(Managers._gameManager.statistics[sceneNumber].Stars);
+                Debug.Log(Managers._gameManager.statistics[sceneNumber].Time);
+                banks.text ="X"+" "+ Managers._gameManager.statistics[sceneNumber].Banks.ToString();
                 time.text="Time: "+ Managers._gameManager.statistics[sceneNumber].Time.ToString();
+                switch (Managers._gameManager.statistics[sceneNumber].Stars) {
+                  
+                    case 1:
+                        firstStar.gameObject.SetActive(true);
+                        break;
+                    case 2:
+                        firstStar.gameObject.SetActive(true);
+                        secondStar.gameObject.SetActive(true);
+                        break;
+                    case 3:
+                        firstStar.gameObject.SetActive(true);
+                        secondStar.gameObject.SetActive(true);
+                        thirdStar.gameObject.SetActive(true);
+                        break;
+                }
+
             }
 
         }
@@ -44,12 +68,15 @@ public class SlideElementsController : MonoBehaviour {
         playButton.GetComponent<Button>().interactable = false;
         interactable = false;
         time.gameObject.SetActive(false);
-        stars.gameObject.SetActive(false);
+        banks.gameObject.SetActive(false);
+        firstStar.gameObject.SetActive(false);
+        secondStar.gameObject.SetActive(false);
+        thirdStar.gameObject.SetActive(false);
     }
     void EnableElements() {
         playButton.SetActive(true);
         time.gameObject.SetActive(true);
-        stars.gameObject.SetActive(true);
+        banks.gameObject.SetActive(true);
     }
 	
 	// Update is called once per frame

@@ -24,7 +24,8 @@ public class Serializer <Tkey,Tvalue> {
 
     public void SerializeDictionary(Dictionary<Tkey,Tvalue> dic) {
 
-       
+        keyList.Clear();
+        valueList.Clear();
         foreach (var obj in dic ) {
 
             Key key = new Key();
@@ -42,14 +43,23 @@ public class Serializer <Tkey,Tvalue> {
     }
 
     public Dictionary<Tkey, Tvalue> Deserialize() {
+        _jSonKeysString = PlayerPrefs.GetString("DicKey");
+        _jSonvaluesString = PlayerPrefs.GetString("DicValue");
+
+        Debug.Log(PlayerPrefs.GetString("DicKey"));
+        if (PlayerPrefs.GetString("DicKey")==null) {
+            return null;
+        }
+
         Dictionary<Tkey, Tvalue> dic = new Dictionary<Tkey, Tvalue>();
 
         keyList.Clear();
         valueList.Clear();
+        dic.Clear();
 
         jSonkeys = _jSonKeysString.Split('|');
         jSonvalues = _jSonvaluesString.Split('|');
-        Debug.Log(jSonvalues.Length-1);
+       // Debug.Log(jSonvalues.Length-1);
 
         for (int i=0; i<jSonvalues.Length-1;++i) {
             valueList.Add(JsonUtility.FromJson<Value>(jSonvalues[i]));
@@ -66,6 +76,12 @@ public class Serializer <Tkey,Tvalue> {
 
 
     void ToJSon() {
+        if (_jSonKeysString != "" && _jSonvaluesString != "") {
+            _jSonKeysString = "";
+            _jSonvaluesString="";
+        }
+
+        Debug.Log(_jSonKeysString);
         foreach (var obj in keyList) {
 
             _jSonKeysString += JsonUtility.ToJson(obj) + "|";
@@ -74,7 +90,8 @@ public class Serializer <Tkey,Tvalue> {
         foreach (var obj in valueList) {
             _jSonvaluesString +=JsonUtility.ToJson(obj)+ "|";
         }
-     
+        PlayerPrefs.SetString("DicKey",_jSonKeysString);
+        PlayerPrefs.SetString("DicValue",_jSonvaluesString);
 
    
     }

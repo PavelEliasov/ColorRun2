@@ -23,6 +23,11 @@ public class SceneController : MonoBehaviour {
     [SerializeField]
     GameObject endOfLevelPanel;
 
+    MovePlayer _player;
+    Animator _playerAnimator;
+
+    private DieElement[] dieElements;
+
     float _score;
     float _starcount;
     int _lifecount=3;
@@ -41,6 +46,12 @@ public class SceneController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        _player = FindObjectOfType<MovePlayer>();
+        _playerAnimator = _player.GetComponent<Animator>();
+        
+        dieElements= FindObjectsOfType<DieElement>();
+
+
          int.TryParse(SceneManager.GetActiveScene().name,out sceneNumber);
          stats = new Statistic();
         StartCoroutine(Timer());
@@ -50,7 +61,7 @@ public class SceneController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-     //   Debug.Log(stats.Time);
+      //  Debug.Log(stats.Time);
         //Debug.Log(stats.Stars);
 	}
 
@@ -79,24 +90,35 @@ public class SceneController : MonoBehaviour {
 
     }
     public void Die() {
-        SceneManager.LoadScene("1");
+        _player.tag = "Untagged";
+        _playerAnimator.enabled = false;
+        _player.enabled = false;
+        foreach (DieElement element in dieElements) {
+            element.EnableRigidbody();
+        }
+       // SceneManager.LoadScene("1");
     }
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag=="Player") {
             LevelComplete();
-          
+            StopCoroutine("Timer");
+            StopAllCoroutines();
         }
        
     }
      void LevelComplete() {
         CountStars();
+
+        // StopCoroutine(Timer());
+        stats.Time =(float) System.Math.Round((double)stats.Time,2);
         Managers._gameManager.Stats(sceneNumber, stats);
+
+        Debug.Log(stats.Time);
         endOfLevelPanel.SetActive(true);
-        Debug.Log(stats.Stars);
+      //  Debug.Log(stats.Stars);
       //  SceneManager.LoadScene("Menu");
 
-        StopCoroutine(Timer());
       //  StartCoroutine(UnloadScene());
         //  Managers._gameManager.LevelsComplete = 1;
 
@@ -124,8 +146,13 @@ public class SceneController : MonoBehaviour {
         yield return null;
         while (true) {
             stats.Time += 0.1f;
+            
             yield return new WaitForSeconds(0.1f);
         }
 
+    }
+
+    public void ReturnToMenu() {
+        SceneManager.LoadScene("Menu");
     }
 }

@@ -33,23 +33,36 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
      List<Statistic> test;
 
+    Serializer<int,Statistic> serial;
+
+    void Awake() {
+        serial = new Serializer<int, Statistic>();
+        if (serial.Deserialize().Count>0) {
+            statistics = serial.Deserialize();
+        }
+        _levelsComplete = PlayerPrefs.GetInt("LevelComplete");
+       // statistics.Add(1, new Statistic() { Banks = 5,Stars=2 });
+
+    }
 	// Use this for initialization
 	void Start () {
-        var serial = new Serializer<int, Statistic>();
-        statistics.Add(1, new Statistic() { Banks=5});
-        statistics.Add(2, new Statistic());
-        statistics.Add(3, new Statistic());
-        serial.SerializeDictionary(statistics);
-       // statistics.Clear();
-        statistics =  serial.Deserialize();
+      //  var serial = new Serializer<int, Statistic>();
+        // statistics.Add(1, new Statistic() { Banks=5});
+        // statistics.Add(2, new Statistic());
+        // statistics.Add(3, new Statistic());
+    //    serial.SerializeDictionary(statistics);
+        //// statistics.Clear();
 
-        Debug.Log(statistics[1].Banks);
-        test = new List<Statistic>();
-        Statistic  st = new Statistic();
-        st.Banks = 10;
-        st.Stars = 10;
-        st.Time = 10;
-        test.Add(st);
+      //  Debug.Log(serial.Deserialize().Count);
+        //statistics =  serial.Deserialize();
+
+       // Debug.Log(statistics[1].Banks);
+       // test = new List<Statistic>();
+       // Statistic  st = new Statistic();
+       // st.Banks = 10;
+       // st.Stars = 10;
+       // st.Time = 10;
+       // test.Add(st);
        
       //  Debug.Log(JsonUtility.ToJson(test));
        // string a = JsonUtility.ToJson(st);
@@ -66,15 +79,20 @@ public class GameManager : MonoBehaviour {
             if (stats.Time < statistics[scene].Time) {
                 statistics[scene].Time = stats.Time;
             }
-            //if (stats.Score > statistics[scene].Score) {
-            //    statistics[scene].Score = stats.Score;
-            //}
-           // statistics[scene] = stats;
+            if (stats.Stars >statistics[scene].Stars) {
+                statistics[scene].Stars = stats.Stars;
+
+                Debug.Log(stats.Stars);
+            }
+            // statistics[scene] = stats;
 
         }  else {
             statistics.Add(scene,stats);
         }
-        Debug.Log(JsonUtility.ToJson(statistics));
+
+        serial.SerializeDictionary(statistics);
+        PlayerPrefs.SetInt("LevelComplete",_levelsComplete);
+      //  Debug.Log(JsonUtility.ToJson(statistics));
        // Debug.Log(statistics[1].Banks);
     } 
 	// Update is called once per frame

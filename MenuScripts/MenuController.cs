@@ -22,4 +22,9 @@ public class MenuController : MonoBehaviour {
 
         Debug.Log("Click");
     }
+    public void ResetStats() {
+        PlayerPrefs.SetInt("LevelComplete", 0);
+        PlayerPrefs.SetString("DicKey",null);
+        PlayerPrefs.SetString("DicValue", null);
+    }
 }

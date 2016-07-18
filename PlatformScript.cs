@@ -242,9 +242,10 @@ public class PlatformScript : MonoBehaviour {
                   Debug.Log("Equal Of Colors");
             }
             else {
+                Debug.Log("Colors not Equal");
                 SceneController.Instance.ChangeScore(-5);
                 SceneController.Instance.RemoveLife();
-                 Debug.Log("Colors not Equal");
+               
             }
         }
 
