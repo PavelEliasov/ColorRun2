@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
     public  Dictionary<int, Statistic> statistics = new Dictionary<int, Statistic>();
 
     //[SerializeField]
-    //public static ItemManager _items;
+    ItemManager _items;
 
 
 
@@ -83,13 +83,19 @@ public class GameManager : MonoBehaviour {
     void Awake() {
         
 
-      //  Managers._itemManager.Boots = true;
-        Debug.Log(JsonUtility.ToJson(Managers._itemManager));
         serial = new Serializer<int, Statistic>();
-        if (serial.Deserialize().Count>0) {
+        if (serial.Deserialize().Count>0) {//check for empty dictionary. If not empty-deserialize
             statistics = serial.Deserialize();
         }
+       
         _levelsComplete = PlayerPrefs.GetInt("LevelComplete");
+        _spentBanks = PlayerPrefs.GetInt("SpentBanks");
+
+        if (PlayerPrefs.GetString("ItemManager")!="" ) {
+            JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("ItemManager"), Managers._itemManager);
+            // Managers._itemManager = JsonUtility.FromJson<ItemManager>(PlayerPrefs.GetString("ItemManager"));
+        }
+       
         CalculateTotalSumOfBanks();
 
     }
@@ -97,10 +103,8 @@ public class GameManager : MonoBehaviour {
     void OnLevelWasLoaded() {
         if (SceneManager.GetActiveScene().name == "Menu" || SceneManager.GetActiveScene().name == "MainMenu") {
             Debug.Log(JsonUtility.ToJson(Managers._itemManager));
-
-            //  ItemManager.Instance=JsonUtility.FromJson<ItemManager>(JsonUtility.ToJson(ItemManager.Instance));
-            //Debug.Log(JsonUtility.ToJson(ItemManager.Instance));
-            // Debug.Log(_items);
+            PlayerPrefs.SetString("ItemManager", JsonUtility.ToJson(Managers._itemManager));
+            PlayerPrefs.SetInt("SpentBanks",_spentBanks);
         }
         // Debug.Log(SceneManager.GetActiveScene().name);
         if (SceneManager.GetActiveScene().name=="Menu") {

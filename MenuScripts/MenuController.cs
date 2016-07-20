@@ -26,8 +26,10 @@ public class MenuController : MonoBehaviour {
     }
     public void ResetStats() {
         PlayerPrefs.SetInt("LevelComplete", 0);
+        PlayerPrefs.SetInt("SpentBanks", 0);
         PlayerPrefs.SetString("DicKey",null);
         PlayerPrefs.SetString("DicValue", null);
+        PlayerPrefs.SetString("ItemManager", null);
     }
 
 

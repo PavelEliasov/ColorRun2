@@ -3,18 +3,75 @@ using System.Collections;
 
 [System.Serializable]
 public class ItemManager :MonoBehaviour{
-  [SerializeField]  public bool Skate;
+   [SerializeField]
+    public bool Skate;
+    [SerializeField]
     public bool HeadPhones;
+    [SerializeField]
     public bool RollerSkate;
-    public bool Magnet;
-    public bool Boots;
-    public bool Flesh;
+   [SerializeField]
+    private int magnet;
+    [SerializeField]
+    private int boots;
+   [SerializeField]
+    private int flash;
 
+    [SerializeField]
     public bool DressOnSkate;
+    [SerializeField]
     public bool DressOnHeadPhones;
+    [SerializeField]
     public bool DressOnRollerSkate;
 
-   // private static ItemManager _instance;
+    public int Magnet   {
+        get  {
+            if (magnet>3) {
+                magnet=3;
+            }
+            return magnet;
+        }
+
+        set {
+            if (magnet+value>3) {
+                magnet = 3;
+            }
+            magnet = value;
+        }
+    }
+
+    public int Boots   {
+        get {
+            if (boots>3) {
+                boots = 3;
+            }
+            return boots;
+        }
+
+        set  {
+            if (boots+value>3) {
+                boots = 3;
+            }
+            boots = value;
+        }
+    }
+
+    public int Flash{
+        get  {
+            if (flash > 3) {
+                flash = 3;
+            }
+            return flash;
+        }
+
+        set {
+            if (flash + value > 3) {
+                flash = 3;
+            }
+            flash = value;
+        }
+    }
+
+    // private static ItemManager _instance;
 
     //public static ItemManager Instance {
     //    get  {

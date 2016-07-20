@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MarketController : MonoBehaviour {
     [Header("UI")]
@@ -20,6 +21,7 @@ public class MarketController : MonoBehaviour {
     GameObject[] equipment;
 
     MarketItem _selectedItem;
+    MarketItem[] _marketItems;
 
     GameObject _objForEnable;
 
@@ -30,6 +32,8 @@ public class MarketController : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
+        _marketItems = FindObjectsOfType<MarketItem>();
+
         _totalBanks.text ="X "+Managers._gameManager.TotalBanks.ToString();
 	}
 	
@@ -55,7 +59,7 @@ public class MarketController : MonoBehaviour {
 
     public void EnableQuestPanel() {
         QuestPanel.SetActive(true);
-        if (_objForEnable == null) {
+        if (_selectedItem == null) {
             QuestPickItemPanel.SetActive(true);
         }
         else {
@@ -79,12 +83,14 @@ public class MarketController : MonoBehaviour {
             switch (_selectedItem.Item) {
                 case ItemEnum.HeadPhones:
                     Managers._itemManager.HeadPhones = true;
+                    _selectedItem = null;
                     break;
                 case ItemEnum.RollerSkate:
 
                     break;
                 case ItemEnum.Skate:
-
+                    Managers._itemManager.Skate = true;
+                    _selectedItem = null;
                     break;
                 case ItemEnum.Boots:
 
@@ -93,9 +99,14 @@ public class MarketController : MonoBehaviour {
 
                     break;
                 case ItemEnum.Magnet:
-
+                    Managers._itemManager.Magnet++;
+                    _selectedItem = null;
                     break;
 
+            }
+
+            foreach (MarketItem item in _marketItems) {
+                item.CheckItem();
             }
             Managers._gameManager.SpentBanks += priceOfSelectedItem;
           //  Managers._gameManager.TotalBanks -= priceOfSelectedItem;
@@ -127,5 +138,10 @@ public class MarketController : MonoBehaviour {
             }
         }
 
+    }
+
+    public void GoToMenu() {
+
+        SceneManager.LoadScene("MainMenu");
     }
 }
