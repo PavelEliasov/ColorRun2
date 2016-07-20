@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour {
-
+    [SerializeField]
+    Text totalBanks;
 	// Use this for initialization
 	void Start () {
-	
+        totalBanks.text = "X " + Managers._gameManager.TotalBanks.ToString();
 	}
 	
 	// Update is called once per frame
@@ -27,4 +29,6 @@ public class MenuController : MonoBehaviour {
         PlayerPrefs.SetString("DicKey",null);
         PlayerPrefs.SetString("DicValue", null);
     }
+
+
 }

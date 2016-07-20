@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class GameManager : MonoBehaviour {
+
+
+    int _totalBanks;
+    int _spentBanks;
+    int _receivedBanks;
+
     public int _levelsComplete;
     public int sceneNumber;//The number of last unload scene for position of slide
     public int _selectedScene;
@@ -18,6 +25,39 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public int TotalBanks {
+        get  {
+            return _totalBanks;
+        }
+
+        set  {
+            _totalBanks = value;
+        }
+    }
+    public int SpentBanks   {
+        get    {
+            return _spentBanks;
+        }
+
+        set {
+            _spentBanks = value;
+        }
+    }
+
+    public int ReceivedBanks  {
+        get {
+            return _receivedBanks;
+        }
+
+        set {
+            _receivedBanks = value;
+        }
+    }
+
+ 
+
+
+
     //public Dictionary<int, Statistic> Statistics  {
     //    get {
     //        return statistics;
@@ -28,7 +68,12 @@ public class GameManager : MonoBehaviour {
     //    }
     //}
     [SerializeField]
-  public  Dictionary<int, Statistic> statistics = new Dictionary<int, Statistic>();
+    public  Dictionary<int, Statistic> statistics = new Dictionary<int, Statistic>();
+
+    //[SerializeField]
+    //public static ItemManager _items;
+
+
 
     [SerializeField]
      List<Statistic> test;
@@ -36,12 +81,32 @@ public class GameManager : MonoBehaviour {
     Serializer<int,Statistic> serial;
 
     void Awake() {
+        
+
+      //  Managers._itemManager.Boots = true;
+        Debug.Log(JsonUtility.ToJson(Managers._itemManager));
         serial = new Serializer<int, Statistic>();
         if (serial.Deserialize().Count>0) {
             statistics = serial.Deserialize();
         }
         _levelsComplete = PlayerPrefs.GetInt("LevelComplete");
-       // statistics.Add(1, new Statistic() { Banks = 5,Stars=2 });
+        CalculateTotalSumOfBanks();
+
+    }
+
+    void OnLevelWasLoaded() {
+        if (SceneManager.GetActiveScene().name == "Menu" || SceneManager.GetActiveScene().name == "MainMenu") {
+            Debug.Log(JsonUtility.ToJson(Managers._itemManager));
+
+            //  ItemManager.Instance=JsonUtility.FromJson<ItemManager>(JsonUtility.ToJson(ItemManager.Instance));
+            //Debug.Log(JsonUtility.ToJson(ItemManager.Instance));
+            // Debug.Log(_items);
+        }
+        // Debug.Log(SceneManager.GetActiveScene().name);
+        if (SceneManager.GetActiveScene().name=="Menu") {
+            CalculateTotalSumOfBanks();
+            Debug.Log("Menu");
+        }
 
     }
 	// Use this for initialization
@@ -101,5 +166,16 @@ public class GameManager : MonoBehaviour {
            // Debug.Log(statistics[1].Stars);
         }
          // Debug.Log(_selectedScene);
+    }
+
+    void CalculateTotalSumOfBanks() {
+        int sum = 0;
+        foreach (var stat in statistics) {
+            sum += stat.Value.Banks;
+        }
+        sum = sum - _spentBanks + _receivedBanks;
+        _totalBanks = sum;
+
+        Debug.Log(_totalBanks);
     }
 }

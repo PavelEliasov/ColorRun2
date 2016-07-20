@@ -38,8 +38,8 @@ public class SlideElementsController : MonoBehaviour {
             Debug.Log(Managers._gameManager.statistics.ContainsKey(sceneNumber));
             if (Managers._gameManager.statistics.ContainsKey(sceneNumber)) {
 
-                Debug.Log(Managers._gameManager.statistics[sceneNumber].Stars);
-                Debug.Log(Managers._gameManager.statistics[sceneNumber].Time);
+              //  Debug.Log(Managers._gameManager.statistics[sceneNumber].Stars);
+              //  Debug.Log(Managers._gameManager.statistics[sceneNumber].Time);
                 banks.text ="X"+" "+ Managers._gameManager.statistics[sceneNumber].Banks.ToString();
                 time.text="Time: "+ Managers._gameManager.statistics[sceneNumber].Time.ToString();
                 switch (Managers._gameManager.statistics[sceneNumber].Stars) {

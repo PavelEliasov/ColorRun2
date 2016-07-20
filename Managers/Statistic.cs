@@ -6,7 +6,7 @@ public class Statistic  {
     [SerializeField]
     float _time;
     [SerializeField]
-    float _bank;
+    int _bank;
     [SerializeField]
     int _stars;
    
@@ -21,7 +21,7 @@ public class Statistic  {
         }
     }
 
-    public float Banks  {
+    public int Banks  {
         get  {
             return _bank;
         }

@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(ItemManager))]
 [RequireComponent(typeof(AudioManager))]
 [RequireComponent(typeof(GameManager))]
+
 public class Managers : MonoBehaviour {
    // UnityEngine.Object[] amanagers;
    
@@ -26,7 +28,7 @@ public class Managers : MonoBehaviour {
 
     public static AudioManager _audioManager { get; private set; }
     public static GameManager _gameManager; //{ get;private set; }
-
+    public static ItemManager _itemManager;
 
     List<IGameManager> managers;
     // Use this for initialization
@@ -61,6 +63,7 @@ public class Managers : MonoBehaviour {
             managers = new List<IGameManager>();
             _gameManager = GetComponent<GameManager>();
             _audioManager = GetComponent<AudioManager>();
+            _itemManager = GetComponent<ItemManager>();
             //  Debug.Log(_gameManager.LevelsComplete);
             // Debug.Log(_audioManager);
 

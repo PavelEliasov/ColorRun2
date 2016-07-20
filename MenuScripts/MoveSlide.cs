@@ -29,13 +29,21 @@ public class MoveSlide : MonoBehaviour {
      
        slideTrans.DOLocalMoveX(step, 0.3f,true);
     }
+    public void MoveUp(float step) {
+        slideTrans.DOLocalMoveY(step, 0.3f, true);
+    }
+
+    public void MoveDown(float step) {
+
+        slideTrans.DOLocalMoveY(step, 0.3f, true);
+    }
 
     public void Scale(Vector3 scaleValue) {
 
         slideTrans.DOScale(scaleValue,0.5f);
     }
     public void UnScale() {
-        slideTrans.DOScale(Vector3.one,0.5f);
+        slideTrans.DOScale(Vector3.one,0.3f);
     }
     public void StopAllTweens() {
 

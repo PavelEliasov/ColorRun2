@@ -23,6 +23,9 @@ public class SceneController : MonoBehaviour {
     [SerializeField]
     GameObject endOfLevelPanel;
 
+    [SerializeField]
+    GameObject diePanel;
+
     MovePlayer _player;
     Animator _playerAnimator;
 
@@ -96,6 +99,7 @@ public class SceneController : MonoBehaviour {
         foreach (DieElement element in dieElements) {
             element.EnableRigidbody();
         }
+        Invoke("EnableDiePanel",1f);
        // SceneManager.LoadScene("1");
     }
 
@@ -124,6 +128,7 @@ public class SceneController : MonoBehaviour {
 
     }
 
+   
     void CountStars() {
         if (stats.Banks>=firstStarPrice) {
             stats.Stars++;
@@ -135,6 +140,10 @@ public class SceneController : MonoBehaviour {
             stats.Stars++;
         }
 
+    }
+
+    void EnableDiePanel() {
+        diePanel.SetActive(true);
     }
 
     IEnumerator UnloadScene() {
@@ -151,7 +160,9 @@ public class SceneController : MonoBehaviour {
         }
 
     }
-
+    public void RestartLevel() {
+        SceneManager.LoadScene(sceneNumber.ToString());
+    }
     public void ReturnToMenu() {
         SceneManager.LoadScene("Menu");
     }
