@@ -227,7 +227,7 @@ public class PlatformScript : MonoBehaviour {
         }
 
         if (other.gameObject.tag == "Player") {
-
+            _playerTrans.localRotation = new Quaternion(_platformTrans.rotation.x, 0, 0, 1);// _platformTrans.localRotation.;
           //  Debug.Log(colorOfPlatform);
 
            // Debug.Log(player.GetComponent<MovePlayer>().color);
@@ -251,6 +251,13 @@ public class PlatformScript : MonoBehaviour {
 
 
     }
+
+    void OnTriggerExit(Collider other) {
+
+        if (other.gameObject.tag == "Player") {
+            _playerTrans.localRotation = Quaternion.identity;
+        }
+   }
 
     void DisableDustParticle() {
         Dust.Instance.gameObject.SetActive(false);

@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 public class MovePlayer : MonoBehaviour {
     public enum State {
         Default,
-        JetPack,
-        Skate
+        JetPack
     }
     public enum Pallette {
+        Default,
         RGB,
         RYB,//Red Yellow Black
         Yellow_Black,
@@ -19,7 +19,10 @@ public class MovePlayer : MonoBehaviour {
     }
     // Use this for initialization
     // public LayerMask whatIsGround;
+    [SerializeField]
     public GameObject Smoke;
+    [SerializeField]
+    GameObject SmokeFromSkate;
     public Text acceleration;
     Transform playerTrans;
     Rigidbody playerRigidBody;
@@ -42,17 +45,18 @@ public class MovePlayer : MonoBehaviour {
 
     bool jump;
     bool doubleJump = false;
-    bool secondJump=false;
+    bool secondJump = false;
     bool grounded;
 
     [HideInInspector]
     public BallDirection ballDirect;
 
-    public State _equipment = State.Default;
+    public State _jumpState = State.Default;
 
     public Pallette _pallette = Pallette.RGB;
     // Dictionary<Material, string> playerColor= new Dictionary<Material, string>();
     // public SkinnedMeshRenderer playerSkinnedMesh;
+
 
     public Material _CharacterMaterial;
     public Material _SmokeMaterial;
@@ -62,8 +66,16 @@ public class MovePlayer : MonoBehaviour {
     public Material black;
     public Material yellow;
 
-    public AudioClip [] groundedSounds;
+
+    public bool magnetState;
+    public bool flashState;
+    [SerializeField]
+    GameObject _lightningSphere;
+    public bool bootState;
+
+    public AudioClip[] groundedSounds;
     public AudioClip jumpsound;
+
 
     Vector3 startPos;
     Vector3 movement;
@@ -73,17 +85,11 @@ public class MovePlayer : MonoBehaviour {
     Statistic stat;
     // public Material[] aMaterials;
     void Start() {
-        stat = new Statistic();
-      
-       // Debug.Log(Managers._gameManager.statistics[1].Time);
-        // Time.timeScale = 0.6f;
-       // Debug.Log(Managers._gameManager.LevelsComplete);
-      //  Debug.Log(Managers._audioManager.SoundEffectVolume);
 
-     
+      
+        stat = new Statistic();
         Smoke.SetActive(false);
-        // DustParticle.SetActive(false);
-        // _dustMaterial=
+ 
 
         color = IdentifyColor(_CharacterMaterial.color);
          Debug.Log(color);
@@ -97,21 +103,25 @@ public class MovePlayer : MonoBehaviour {
         playerRigidBody = GetComponent<Rigidbody>();
         _charcontroller = GetComponent<CharacterController>();
         _audioController = GetComponent<AudioSource>();
-
-        // Debug.Log(_charcontroller.detectCollisions);
-
+        CheckState();
+        Debug.Log(playerTrans.localRotation);
     }
 
     void OnDestroy() {
-        //stat.Time = 1;
-        //stat.Stars = 2;
-        //stat.Score = 50;
-
+        
         //Managers._gameManager.Stats(1, stat);
         //Managers._gameManager.LevelsComplete = 1;
 
      //   Debug.Log("Destroy");
 
+    }
+
+    void CheckState() {
+        animator.SetBool("Run",Managers._itemManager.Default);
+        animator.SetBool("Skate", Managers._itemManager.DressOnSkate);
+        animator.SetBool("Rollers", Managers._itemManager.DressOnRollerSkate);
+        animator.SetBool("Moto", Managers._itemManager.DressOnMoto);
+        SmokeFromSkate.SetActive(Managers._itemManager.DressOnSkate);
     }
     string IdentifyColor(Color color) {
         if (color.r > color.g && color.r > color.b) {
@@ -159,6 +169,7 @@ public class MovePlayer : MonoBehaviour {
                 animator.SetBool("DoubleJump", true);
                 secondJump = true;
             }
+            
             doubleJump = false;
             _audioController.PlayOneShot(jumpsound,Managers._audioManager.SoundEffectVolume);
            // jump = true;
@@ -167,6 +178,10 @@ public class MovePlayer : MonoBehaviour {
             animator.SetBool("Jump",true);
           //  DustParticle.SetActive(false);
             Smoke.SetActive(true);
+
+            if (Managers._itemManager.DressOnSkate) {
+                SmokeFromSkate.SetActive(false);
+            }
            // Time.timeScale = 0.8f;
             StartCoroutine(ReturnTimeScale());
             grounded = false;
@@ -207,9 +222,12 @@ public class MovePlayer : MonoBehaviour {
                 _verticalSpeed = _gravity;
             }
            // Debug.Log(_verticalSpeed);
-        } 
+        }
 
-       
+        if (flashState==true) {
+            StartCoroutine(ReturnDefaultSpeed(_speed));
+            flashState = false;
+        }
         movement = new Vector3(0,0, _speed);
         movement.y = _verticalSpeed;
         movement *= Time.deltaTime;
@@ -225,6 +243,10 @@ public class MovePlayer : MonoBehaviour {
             animator.SetBool("Jump",false);
             animator.SetBool("DoubleJump", false);
             Smoke.SetActive(false);
+            if (Managers._itemManager.DressOnSkate) {
+                SmokeFromSkate.SetActive(true);
+            }
+           
             jump = false;
             secondJump = false;
             grounded = true;
@@ -246,7 +268,14 @@ public class MovePlayer : MonoBehaviour {
 
         // Debug.Log(other.gameObject.tag);
         // Debug.Log("TriggerEnter");
-        if (other.gameObject.tag == "Star") {
+        if (other.gameObject.tag == "Magnet") {
+            magnetState = true;
+        }
+        if (other.gameObject.tag == "Flash") {
+            flashState = true;
+        }
+
+        if (other.gameObject.tag == "Bank") {
             SceneController.Instance.stats.Banks++;
             //stat.Stars++;
             Destroy(other.gameObject);
@@ -259,11 +288,11 @@ public class MovePlayer : MonoBehaviour {
     }
 
 
-    
-    public void Jump() {
+
+    public void Jump() {//Call from JumpButton
 
 
-        switch (_equipment) {
+        switch (_jumpState) {
 
             case State.Default:
                 if (_charcontroller.isGrounded == false) {
@@ -285,14 +314,11 @@ public class MovePlayer : MonoBehaviour {
                 jump = true;
                 break;
 
-            case State.Skate:
-                break;
-
         }
-     
-       
-     //   Messenger.Broadcast("CameraRotate");
-        
+
+
+        //   Messenger.Broadcast("CameraRotate");
+
 
     }
 
@@ -309,7 +335,10 @@ public class MovePlayer : MonoBehaviour {
         //    rand = Random.Range(4, 6);
         //}
 
-        switch (_pallette) { 
+        switch (_pallette) {
+            case Pallette.Default:
+                rand = 10;
+                break;
             case Pallette.RGB:
                 rand = Random.Range(1, 4);
                 break;
@@ -371,6 +400,14 @@ public class MovePlayer : MonoBehaviour {
               //  Debug.Log(_SmokeMaterial.color);
                 color = Colors.Yellow;
                 break;
+            case 10:
+                playerMesh.material = red;
+                _CharacterMaterial.SetColor("_Color", red.color);
+                _SmokeMaterial.SetColor("_TintColor", red.color);
+
+                //  Debug.Log(_SmokeMaterial.color);
+                color = Colors.Red;
+                break;
 
         }
 
@@ -387,6 +424,15 @@ public class MovePlayer : MonoBehaviour {
         yield return new WaitForSeconds(0.7f);
         Time.timeScale = 1f;
 
+    }
+
+    IEnumerator ReturnDefaultSpeed(float defspeed) {
+        _speed = _speed *2f;
+        _lightningSphere.SetActive(true);
+        yield return new WaitForSeconds(Managers._itemManager.Flash+1);
+        _lightningSphere.SetActive(false);
+        _speed = defspeed;
+      //  Debug.Log("Return Default Speed");
     }
 
     public void RedButton() {

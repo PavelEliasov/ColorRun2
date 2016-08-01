@@ -113,7 +113,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
         }
         #region  Horizontal Orientation
         if (Orient == Orientation.horizontal) {
-            imagestep =Mathf.Round( imagestep * (Screen.width / 1280f));
+            imagestep =Mathf.Round( imagestep * (Screen.width / 1080f));
             if (UpButton != null && DownButton != null) {
                 RightButton.onClick.AddListener(MoveRightButton);
                 LeftButton.onClick.AddListener(MoveLeftButton);

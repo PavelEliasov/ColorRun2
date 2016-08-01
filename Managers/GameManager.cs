@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour {
     }
 
     void OnLevelWasLoaded() {
+        CalculateTotalSumOfBanks();
         if (SceneManager.GetActiveScene().name == "Menu" || SceneManager.GetActiveScene().name == "MainMenu") {
             Debug.Log(JsonUtility.ToJson(Managers._itemManager));
             PlayerPrefs.SetString("ItemManager", JsonUtility.ToJson(Managers._itemManager));

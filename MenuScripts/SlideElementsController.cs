@@ -33,7 +33,11 @@ public class SlideElementsController : MonoBehaviour {
         
         if (Managers._gameManager.LevelsComplete>=unlockLimit) {
             _lock.enabled =false;
-            EnableElements();
+            if (sceneNumber!=1) {
+                EnableElements();
+            }
+            playButton.SetActive(true);
+
 
             Debug.Log(Managers._gameManager.statistics.ContainsKey(sceneNumber));
             if (Managers._gameManager.statistics.ContainsKey(sceneNumber)) {

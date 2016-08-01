@@ -29,6 +29,16 @@ public class SceneController : MonoBehaviour {
     MovePlayer _player;
     Animator _playerAnimator;
 
+    [Header("Equipment")]
+    [SerializeField]
+    GameObject HeadPhones;
+    [SerializeField]
+    GameObject Skate;
+    [SerializeField]
+    GameObject LeftRoller;
+    [SerializeField]
+    GameObject RightRoller;
+
     private DieElement[] dieElements;
 
     float _score;
@@ -49,6 +59,7 @@ public class SceneController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        CheckEquipmentState();
         _player = FindObjectOfType<MovePlayer>();
         _playerAnimator = _player.GetComponent<Animator>();
         
@@ -59,6 +70,13 @@ public class SceneController : MonoBehaviour {
          stats = new Statistic();
         StartCoroutine(Timer());
        Debug.Log(SceneManager.GetActiveScene().name);
+    }
+
+    void CheckEquipmentState() {
+        HeadPhones.SetActive(Managers._itemManager.DressOnHeadPhones);
+        Skate.SetActive(Managers._itemManager.DressOnSkate);
+        LeftRoller.SetActive(Managers._itemManager.DressOnRollerSkate);
+        RightRoller.SetActive(Managers._itemManager.DressOnRollerSkate);
     }
 	
 	// Update is called once per frame
@@ -120,6 +138,7 @@ public class SceneController : MonoBehaviour {
 
         Debug.Log(stats.Time);
         endOfLevelPanel.SetActive(true);
+        _player.gameObject.SetActive(false);
       //  Debug.Log(stats.Stars);
       //  SceneManager.LoadScene("Menu");
 

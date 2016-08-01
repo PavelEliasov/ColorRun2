@@ -25,7 +25,7 @@ public class MenuController : MonoBehaviour {
         Debug.Log("Click");
     }
     public void ResetStats() {
-        PlayerPrefs.SetInt("LevelComplete", 0);
+        PlayerPrefs.SetInt("LevelComplete", -1);
         PlayerPrefs.SetInt("SpentBanks", 0);
         PlayerPrefs.SetString("DicKey",null);
         PlayerPrefs.SetString("DicValue", null);

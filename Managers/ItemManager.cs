@@ -3,10 +3,12 @@ using System.Collections;
 
 [System.Serializable]
 public class ItemManager :MonoBehaviour{
-   [SerializeField]
+    [SerializeField]
     public bool Skate;
     [SerializeField]
     public bool HeadPhones;
+    [SerializeField]
+    public bool Moto;
     [SerializeField]
     public bool RollerSkate;
    [SerializeField]
@@ -15,11 +17,17 @@ public class ItemManager :MonoBehaviour{
     private int boots;
    [SerializeField]
     private int flash;
+    [SerializeField]
+    public bool Key;
 
+    [SerializeField]
+    public bool Default=true;
     [SerializeField]
     public bool DressOnSkate;
     [SerializeField]
     public bool DressOnHeadPhones;
+    [SerializeField]
+    public bool DressOnMoto;
     [SerializeField]
     public bool DressOnRollerSkate;
 

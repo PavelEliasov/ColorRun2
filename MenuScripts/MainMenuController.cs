@@ -14,11 +14,21 @@ public class MainMenuController : MonoBehaviour {
 	}
 
     public void PlayButton() {
-
-        SceneManager.LoadScene("Menu");
+        StartCoroutine(Loader("Menu"));
+       // SceneManager.LoadScene("Menu");
     }
     public void MarketButton() {
+        StartCoroutine(Loader("Market"));
+       // SceneManager.LoadScene("Market");
+    }
+    public void EquipmentButton() {
+        StartCoroutine(Loader("Equipment"));
+        //SceneManager.LoadScene("Equipment");
 
-        SceneManager.LoadScene("Market");
+    }
+
+    IEnumerator Loader(string sceneName) {
+        yield return new WaitForSeconds(0.09f);
+        SceneManager.LoadScene(sceneName);
     }
 }
