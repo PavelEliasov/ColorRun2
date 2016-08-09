@@ -20,6 +20,8 @@ public class MovePlayer : MonoBehaviour {
     // Use this for initialization
     // public LayerMask whatIsGround;
     [SerializeField]
+    public GameObject jumpEffect;
+    [SerializeField]
     public GameObject Smoke;
     [SerializeField]
     GameObject SmokeFromSkate;
@@ -46,6 +48,7 @@ public class MovePlayer : MonoBehaviour {
     bool jump;
     bool doubleJump = false;
     bool secondJump = false;
+    bool trippleJump = false;
     bool grounded;
 
     [HideInInspector]
@@ -224,10 +227,10 @@ public class MovePlayer : MonoBehaviour {
            // Debug.Log(_verticalSpeed);
         }
 
-        if (flashState==true) {
-            StartCoroutine(ReturnDefaultSpeed(_speed));
-            flashState = false;
-        }
+        //if (flashState==true) {
+        //    StartCoroutine(ReturnDefaultSpeed(_speed));
+        //    flashState = false;
+        //}
         movement = new Vector3(0,0, _speed);
         movement.y = _verticalSpeed;
         movement *= Time.deltaTime;
@@ -268,11 +271,15 @@ public class MovePlayer : MonoBehaviour {
 
         // Debug.Log(other.gameObject.tag);
         // Debug.Log("TriggerEnter");
+        if (other.gameObject.tag == "Boot") {
+           trippleJump= true;
+        }
         if (other.gameObject.tag == "Magnet") {
             magnetState = true;
         }
         if (other.gameObject.tag == "Flash") {
             flashState = true;
+            StartCoroutine(ReturnDefaultSpeed(_speed));
         }
 
         if (other.gameObject.tag == "Bank") {
@@ -304,14 +311,21 @@ public class MovePlayer : MonoBehaviour {
 
             case State.JetPack:
                 if (_charcontroller.isGrounded == false && secondJump == true) {
+                    if (trippleJump==true) {
+                        StartCoroutine(JumpEffect());
+                        trippleJump = false;
+                        doubleJump = true;
+                    }
                     return;
                 }
                 if (_charcontroller.isGrounded == false) {
+                    StartCoroutine(JumpEffect());
                     doubleJump = true;
                     return;
                 }
                 ChangeColor();
                 jump = true;
+               
                 break;
 
         }
@@ -418,6 +432,12 @@ public class MovePlayer : MonoBehaviour {
         return values[UnityEngine.Random.Range(0,values.Length)];
     }
 
+    IEnumerator JumpEffect() {
+        jumpEffect.SetActive(true);
+        yield return new WaitForSeconds(0.09f);
+        jumpEffect.SetActive(false);
+
+    }
 
 
     IEnumerator ReturnTimeScale() {
@@ -432,6 +452,7 @@ public class MovePlayer : MonoBehaviour {
         yield return new WaitForSeconds(Managers._itemManager.Flash+1);
         _lightningSphere.SetActive(false);
         _speed = defspeed;
+        flashState = false;
       //  Debug.Log("Return Default Speed");
     }
 

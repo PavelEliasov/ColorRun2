@@ -60,9 +60,11 @@ public class MarketController : MonoBehaviour {
         priceOfSelectedItem = item.price;
         _selectedItem = item;//add Item to public MarketItem field for manipulate it
 
+       // _playerAnimator.GetComponent<AnimatorControllerParameterType>();
         _playerAnimator.SetBool("Run",false);
         _playerAnimator.SetBool("Skate", false);
         _playerAnimator.SetBool("Rollers", false);
+        _playerAnimator.SetBool("Moto", false);
 
         switch (item.Item) {
             case ItemEnum.Skate:
@@ -70,6 +72,12 @@ public class MarketController : MonoBehaviour {
                     eq.SetActive(true);
                 }
                 _playerAnimator.SetBool("Skate", true);
+                break;
+            case ItemEnum.Moto:
+                foreach (var eq in item._itemsForEnabled) {
+                    eq.SetActive(true);
+                }
+                _playerAnimator.SetBool("Moto", true);
                 break;
             case ItemEnum.RollerSkate:
                 foreach (var eq in item._itemsForEnabled) {
@@ -179,10 +187,13 @@ public class MarketController : MonoBehaviour {
             foreach (MarketItem item in _marketItems) {
                 item.CheckItem();
             }
-            Managers._gameManager.SpentBanks += priceOfSelectedItem;
 
-            CloseQuestPanel();
             StartCoroutine(DownCountTotalBanks());
+
+           // Managers._gameManager.SpentBanks += priceOfSelectedItem;
+            Managers._gameManager.TotalBanks -= priceOfSelectedItem;
+            CloseQuestPanel();
+            
 
         }
 

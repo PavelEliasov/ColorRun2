@@ -15,6 +15,6 @@ public class MirrorFallow : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        mirrorTrans.DOMoveZ(cameraTrans.position.z,1f);
+        mirrorTrans.DOMoveZ(cameraTrans.position.z+50,1f);
 	}
 }

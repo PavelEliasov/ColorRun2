@@ -243,8 +243,11 @@ public class PlatformScript : MonoBehaviour {
             }
             else {
                 Debug.Log("Colors not Equal");
+                if (player.flashState==false) {
+                    SceneController.Instance.RemoveLife();
+                }
                 SceneController.Instance.ChangeScore(-5);
-                SceneController.Instance.RemoveLife();
+               
                
             }
         }

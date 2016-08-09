@@ -45,10 +45,20 @@ public class EquipmentController : MonoBehaviour {
 
         switch (eq.Item) {
             case ItemEnum.Skate:
-                eq.ItemForEnable.SetActive(!eq.ItemForEnable.activeSelf);
-                eq.lightImage.gameObject.SetActive(!eq.lightImage.gameObject.activeSelf);
-                Managers._itemManager.DressOnSkate = eq.ItemForEnable.activeSelf;
 
+                //  eq.ItemForEnable.SetActive(!eq.ItemForEnable.activeSelf);
+                foreach (var item in eq.itemsForEnable) {
+                    if (item!=null) {
+                        item.SetActive(!item.activeSelf);
+                    }
+                   
+                }
+              
+                if (eq.itemsForEnable[0]!=null) {
+                    Managers._itemManager.DressOnSkate = eq.itemsForEnable[0].activeSelf;
+                }
+
+                eq.lightImage.gameObject.SetActive(!eq.lightImage.gameObject.activeSelf);
 
                 _playerAnimator.SetBool("Skate", Managers._itemManager.DressOnSkate);
                 _playerAnimator.SetBool("Run",! Managers._itemManager.DressOnSkate);
@@ -56,9 +66,19 @@ public class EquipmentController : MonoBehaviour {
                 break;
 
             case ItemEnum.RollerSkate:
-                eq.ItemForEnable.SetActive(!eq.ItemForEnable.activeSelf);
+                // eq.ItemForEnable.SetActive(!eq.ItemForEnable.activeSelf);
+                foreach (var item in eq.itemsForEnable) {
+                    if (item != null) {
+                        item.SetActive(!item.activeSelf);
+                    }
+
+                }
+
+                if (eq.itemsForEnable[0] != null) {
+                    Managers._itemManager.DressOnRollerSkate = eq.itemsForEnable[0].activeSelf;
+                }
                 eq.lightImage.gameObject.SetActive(!eq.lightImage.gameObject.activeSelf);
-                Managers._itemManager.DressOnRollerSkate = eq.ItemForEnable.activeSelf;
+               // Managers._itemManager.DressOnRollerSkate = eq.ItemForEnable.activeSelf;
 
 
                 _playerAnimator.SetBool("Skate", Managers._itemManager.DressOnRollerSkate);
@@ -68,9 +88,20 @@ public class EquipmentController : MonoBehaviour {
 
             case ItemEnum.Moto:
 
-                eq.ItemForEnable.SetActive(!eq.ItemForEnable.activeSelf);
+                //   eq.ItemForEnable.SetActive(!eq.ItemForEnable.activeSelf);
+                foreach (var item in eq.itemsForEnable) {
+                    if (item != null) {
+                        item.SetActive(!item.activeSelf);
+                    }
+
+                }
+
+                if (eq.itemsForEnable[0] != null) {
+                    Managers._itemManager.DressOnMoto = eq.itemsForEnable[0].activeSelf;
+                }
+
                 eq.lightImage.gameObject.SetActive(!eq.lightImage.gameObject.activeSelf);
-                Managers._itemManager.DressOnMoto = eq.ItemForEnable.activeSelf;
+               // Managers._itemManager.DressOnMoto = eq.ItemForEnable.activeSelf;
 
 
                 _playerAnimator.SetBool("Moto", Managers._itemManager.DressOnMoto);
@@ -92,8 +123,10 @@ public class EquipmentController : MonoBehaviour {
 
         foreach (MainEquipment eq in mainEquipments) {
             if (equipment != eq) {
-
-                    eq.ItemForEnable.SetActive(false);
+                foreach (var item in eq.itemsForEnable) {
+                    item.SetActive(false);
+                }
+                   // eq.ItemForEnable.SetActive(false);
              
              //   eq.ItemForEnable.SetActive(false);
                 eq.lightImage.gameObject.SetActive(false);

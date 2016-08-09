@@ -31,13 +31,23 @@ public class SceneController : MonoBehaviour {
 
     [Header("Equipment")]
     [SerializeField]
+    GameObject JetPack;
+    [SerializeField]
+    GameObject Scarf;
+    [SerializeField]
     GameObject HeadPhones;
     [SerializeField]
     GameObject Skate;
     [SerializeField]
+    GameObject Moto;
+    [SerializeField]
     GameObject LeftRoller;
     [SerializeField]
     GameObject RightRoller;
+
+    [Header("Music")]
+    [SerializeField]
+    AudioClip SceneMusic;
 
     private DieElement[] dieElements;
 
@@ -59,7 +69,8 @@ public class SceneController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        CheckEquipmentState();
+        Managers._audioManager.PlayMusic(SceneMusic);
+       
         _player = FindObjectOfType<MovePlayer>();
         _playerAnimator = _player.GetComponent<Animator>();
         
@@ -70,13 +81,26 @@ public class SceneController : MonoBehaviour {
          stats = new Statistic();
         StartCoroutine(Timer());
        Debug.Log(SceneManager.GetActiveScene().name);
+        CheckEquipmentState();
     }
 
     void CheckEquipmentState() {
         HeadPhones.SetActive(Managers._itemManager.DressOnHeadPhones);
         Skate.SetActive(Managers._itemManager.DressOnSkate);
+        Moto.SetActive(Managers._itemManager.DressOnMoto);
         LeftRoller.SetActive(Managers._itemManager.DressOnRollerSkate);
         RightRoller.SetActive(Managers._itemManager.DressOnRollerSkate);
+
+        if (_player._jumpState == MovePlayer.State.Default || Managers._itemManager.DressOnMoto == true) {
+            JetPack.SetActive(false);
+            if (Managers._itemManager.DressOnMoto == true) {
+                Scarf.SetActive(true);
+            }
+        }
+        else {
+            JetPack.SetActive(true);
+        }
+
     }
 	
 	// Update is called once per frame

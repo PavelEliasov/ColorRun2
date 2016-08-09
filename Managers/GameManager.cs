@@ -34,25 +34,25 @@ public class GameManager : MonoBehaviour {
             _totalBanks = value;
         }
     }
-    public int SpentBanks   {
-        get    {
-            return _spentBanks;
-        }
+    //public int SpentBanks   {
+    //    get    {
+    //        return _spentBanks;
+    //    }
 
-        set {
-            _spentBanks = value;
-        }
-    }
+    //    set {
+    //        _spentBanks = value;
+    //    }
+    //}
 
-    public int ReceivedBanks  {
-        get {
-            return _receivedBanks;
-        }
+    //public int ReceivedBanks  {
+    //    get {
+    //        return _receivedBanks;
+    //    }
 
-        set {
-            _receivedBanks = value;
-        }
-    }
+    //    set {
+    //        _receivedBanks = value;
+    //    }
+    //}
 
  
 
@@ -89,27 +89,40 @@ public class GameManager : MonoBehaviour {
         }
        
         _levelsComplete = PlayerPrefs.GetInt("LevelComplete");
-        _spentBanks = PlayerPrefs.GetInt("SpentBanks");
+        _totalBanks     = PlayerPrefs.GetInt("TotalBanks");
+        _spentBanks     = PlayerPrefs.GetInt("SpentBanks");
+        _receivedBanks  = PlayerPrefs.GetInt("RecievedBanks");
 
         if (PlayerPrefs.GetString("ItemManager")!="" ) {
             JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("ItemManager"), Managers._itemManager);
             // Managers._itemManager = JsonUtility.FromJson<ItemManager>(PlayerPrefs.GetString("ItemManager"));
         }
-       
-        CalculateTotalSumOfBanks();
+
+        if (PlayerPrefs.GetString("AudioManager") != "") {
+            JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("AudioManager"), Managers._audioManager);
+            // Managers._itemManager = JsonUtility.FromJson<ItemManager>(PlayerPrefs.GetString("ItemManager"));
+        }
+
+       // CalculateTotalSumOfBanks();
 
     }
 
     void OnLevelWasLoaded() {
-        CalculateTotalSumOfBanks();
+      //  CalculateTotalSumOfBanks();
         if (SceneManager.GetActiveScene().name == "Menu" || SceneManager.GetActiveScene().name == "MainMenu") {
-            Debug.Log(JsonUtility.ToJson(Managers._itemManager));
+           // Debug.Log(JsonUtility.ToJson(Managers._itemManager));
+            Debug.Log(JsonUtility.ToJson(Managers._audioManager));
             PlayerPrefs.SetString("ItemManager", JsonUtility.ToJson(Managers._itemManager));
-            PlayerPrefs.SetInt("SpentBanks",_spentBanks);
+            PlayerPrefs.SetString("AudioManager",JsonUtility.ToJson(Managers._audioManager));
+            //PlayerPrefs.SetFloat("EffectsVolume",AudioListener.volume);
+            //PlayerPrefs.Set("EffectsVolume", AudioListener.volume);
+            PlayerPrefs.SetInt("TotalBanks",_totalBanks);
+            //PlayerPrefs.SetInt("SpentBanks",_spentBanks);
+            //PlayerPrefs.SetInt("RecievedBanks",_receivedBanks);
         }
         // Debug.Log(SceneManager.GetActiveScene().name);
         if (SceneManager.GetActiveScene().name=="Menu") {
-            CalculateTotalSumOfBanks();
+           // CalculateTotalSumOfBanks();
             Debug.Log("Menu");
         }
 
@@ -144,7 +157,9 @@ public class GameManager : MonoBehaviour {
        
         if (statistics.ContainsKey(scene)) {
             if (stats.Banks>statistics[scene].Banks) {
+                _totalBanks += stats.Banks - statistics[scene].Banks;
                 statistics[scene].Banks = stats.Banks;
+               
             }
             if (stats.Time < statistics[scene].Time) {
                 statistics[scene].Time = stats.Time;
@@ -158,6 +173,7 @@ public class GameManager : MonoBehaviour {
 
         }  else {
             statistics.Add(scene,stats);
+            _totalBanks = stats.Banks;
         }
 
         serial.SerializeDictionary(statistics);

@@ -26,6 +26,11 @@ public class MainMenuController : MonoBehaviour {
         //SceneManager.LoadScene("Equipment");
 
     }
+    public void SettingsButton() {
+        StartCoroutine(Loader("Settings"));
+        //SceneManager.LoadScene("Equipment");
+
+    }
 
     IEnumerator Loader(string sceneName) {
         yield return new WaitForSeconds(0.09f);
