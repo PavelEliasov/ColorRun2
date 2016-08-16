@@ -64,6 +64,8 @@ public class AudioManager : MonoBehaviour,IGameManager {
     void Start () {
         
         _audioSource = GetComponent<AudioSource>();
+
+        Debug.Log("sdfsdfsdg");
         defaultClip = _audioSource.clip;
         _audioSource.ignoreListenerVolume=true;
         _audioSource.ignoreListenerPause = true;

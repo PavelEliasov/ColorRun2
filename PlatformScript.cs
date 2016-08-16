@@ -11,6 +11,7 @@ public class PlatformScript : MonoBehaviour {
     PlatformColor _platformColor;
 
     public enum AnimateDirection {
+        FirstPlatform,
         Default,
         Left,
         Right,
@@ -135,11 +136,20 @@ public class PlatformScript : MonoBehaviour {
 
     void StartMove() {
         switch (FlyDirection) {
+            case AnimateDirection.FirstPlatform:
+                //colorOfPlatform = player.color;
+                ChangePlatformColor(player.color);
+                break;
+
             case AnimateDirection.Default:
                 
                 break;
             case AnimateDirection.Left:
+
+               //ebug.Log("LeftMove");
                 _platformTrans.position = new Vector3(startPos.x - 15, startPos.y, startPos.z);
+
+              //Debug.Log(_platformTrans.position.x);
                 _platformTrans.DOMoveX(startPos.x,1f).SetEase(Ease.InOutExpo);
                 break;
             case AnimateDirection.Right:

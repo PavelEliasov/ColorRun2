@@ -120,6 +120,7 @@ public class EquipmentController : MonoBehaviour {
 
         Managers._itemManager.DressOnSkate = false;
         Managers._itemManager.DressOnRollerSkate = false;
+        Managers._itemManager.DressOnMoto = false;
 
         foreach (MainEquipment eq in mainEquipments) {
             if (equipment != eq) {

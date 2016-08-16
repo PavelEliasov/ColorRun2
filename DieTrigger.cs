@@ -14,7 +14,7 @@ public class DieTrigger : MonoBehaviour {
 	}
 
     void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag=="Player") {
+        if (other.gameObject.tag=="Player" || other.gameObject.tag=="PlayerDamaged") {
             _controller.Die();
         }
 

@@ -69,7 +69,10 @@ public class SceneController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Managers._audioManager.PlayMusic(SceneMusic);
+        if (Managers._audioManager._audioSource!=null) {
+            Managers._audioManager.PlayMusic(SceneMusic);
+        }
+       
        
         _player = FindObjectOfType<MovePlayer>();
         _playerAnimator = _player.GetComponent<Animator>();
@@ -122,20 +125,24 @@ public class SceneController : MonoBehaviour {
     }
 
     public void RemoveLife() {
+        
+
         lifeImages[_lifecount-1].enabled = false;
         _lifecount--;
 
         if (_lifecount==0) {
              Die();
+            return;
         }
-        
+        StartCoroutine(ReturnForm());
+
     }
 
     public void AddLife() {
 
     }
     public void Die() {
-        _player.tag = "Untagged";
+        _player.tag = "PlayerDamaged";//set player tag to "Untagged" for disable collisions from platform
         _playerAnimator.enabled = false;
         _player.enabled = false;
         foreach (DieElement element in dieElements) {
@@ -200,6 +207,28 @@ public class SceneController : MonoBehaviour {
             stats.Time += 0.1f;
             
             yield return new WaitForSeconds(0.1f);
+        }
+
+    }
+
+
+    IEnumerator ReturnForm() {
+        _player.tag = "PlayerDamaged";//set player tag to "Untagged" for disable collisions
+        _playerAnimator.enabled = false;
+       // _player.enabled = false;
+        foreach (DieElement element in dieElements) {
+            element.EnableRigidbody();
+        }
+        yield return new WaitForSeconds(0.3f);
+        _player.tag = "Player";//set player tag to "Untagged" for disable collisions
+        _playerAnimator.enabled = true;
+       // _player.enabled = false;
+        foreach (DieElement element in dieElements) {
+            if (element.Lose!=null) {
+                element.Lose();
+            }
+           
+            //element.ReturnForm();
         }
 
     }

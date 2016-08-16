@@ -7,6 +7,7 @@ public class Dust : MonoBehaviour {
 
     public static Dust Instance   {
         get {
+            
             if (_instance==null) {
                 var container= FindObjectOfType<Dust>();
                 _instance = container;

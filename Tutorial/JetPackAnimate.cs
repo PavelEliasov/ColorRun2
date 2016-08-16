@@ -3,8 +3,10 @@ using System.Collections;
 
 public class JetPackAnimate : MonoBehaviour {
     Transform jetpackTrans;
+  
 	// Use this for initialization
 	void Start () {
+    
         jetpackTrans = GetComponent<Transform>();
 	}
 	
@@ -12,4 +14,6 @@ public class JetPackAnimate : MonoBehaviour {
 	void Update () {
         jetpackTrans.Rotate(Vector3.up*Time.deltaTime*50);
 	}
+
+   
 }

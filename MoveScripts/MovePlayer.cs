@@ -19,12 +19,13 @@ public class MovePlayer : MonoBehaviour {
     }
     // Use this for initialization
     // public LayerMask whatIsGround;
-    [SerializeField]
-    public GameObject jumpEffect;
+
+    //[SerializeField]
+    //public GameObject doubleJumpEffect;
     [SerializeField]
     public GameObject Smoke;
-    [SerializeField]
-    GameObject SmokeFromSkate;
+    //[SerializeField]
+    //GameObject SmokeFromSkate;
     public Text acceleration;
     Transform playerTrans;
     Rigidbody playerRigidBody;
@@ -74,6 +75,9 @@ public class MovePlayer : MonoBehaviour {
     public bool flashState;
     [SerializeField]
     GameObject _lightningSphere;
+    [SerializeField]
+    GameObject _speedEffect;
+
     public bool bootState;
 
     public AudioClip[] groundedSounds;
@@ -86,14 +90,25 @@ public class MovePlayer : MonoBehaviour {
     MeshRenderer playerMesh;
 
     Statistic stat;
+
+    GameObject _jumpEffect;
+    Transform _jumpeffectTrans;
+    GameObject _doubleJumpEffect;
+    Transform _doubleJumpTrans;
     // public Material[] aMaterials;
     void Start() {
+        Time.timeScale = 1;
+        _jumpEffect = JumpEffect.Instance.gameObject;
+        _jumpeffectTrans = _jumpEffect.transform;
+        _jumpEffect.SetActive(false);
+        _doubleJumpEffect = DoubleJumpEffect.Instance.gameObject;
+        _doubleJumpTrans = _doubleJumpEffect.transform;
+        _doubleJumpEffect.SetActive(false);
 
-      
-        stat = new Statistic();
+        stat = new Statistic();//object for statistic
+
         Smoke.SetActive(false);
  
-
         color = IdentifyColor(_CharacterMaterial.color);
          Debug.Log(color);
         ballDirect = BallDirection.forward;
@@ -124,7 +139,7 @@ public class MovePlayer : MonoBehaviour {
         animator.SetBool("Skate", Managers._itemManager.DressOnSkate);
         animator.SetBool("Rollers", Managers._itemManager.DressOnRollerSkate);
         animator.SetBool("Moto", Managers._itemManager.DressOnMoto);
-        SmokeFromSkate.SetActive(Managers._itemManager.DressOnSkate);
+      //  SmokeFromSkate.SetActive(Managers._itemManager.DressOnSkate);
     }
     string IdentifyColor(Color color) {
         if (color.r > color.g && color.r > color.b) {
@@ -175,7 +190,11 @@ public class MovePlayer : MonoBehaviour {
             
             doubleJump = false;
             _audioController.PlayOneShot(jumpsound,Managers._audioManager.SoundEffectVolume);
-           // jump = true;
+
+         
+           
+
+            // jump = true;
             //  Debug.Log("jump");
             // playerRigidBody.AddForce(Vector3.up*_jumpForce,ForceMode.Impulse);
             animator.SetBool("Jump",true);
@@ -183,7 +202,7 @@ public class MovePlayer : MonoBehaviour {
             Smoke.SetActive(true);
 
             if (Managers._itemManager.DressOnSkate) {
-                SmokeFromSkate.SetActive(false);
+             //   SmokeFromSkate.SetActive(false);
             }
            // Time.timeScale = 0.8f;
             StartCoroutine(ReturnTimeScale());
@@ -247,7 +266,7 @@ public class MovePlayer : MonoBehaviour {
             animator.SetBool("DoubleJump", false);
             Smoke.SetActive(false);
             if (Managers._itemManager.DressOnSkate) {
-                SmokeFromSkate.SetActive(true);
+                //SmokeFromSkate.SetActive(true);
             }
            
             jump = false;
@@ -272,10 +291,12 @@ public class MovePlayer : MonoBehaviour {
         // Debug.Log(other.gameObject.tag);
         // Debug.Log("TriggerEnter");
         if (other.gameObject.tag == "Boot") {
+            Debug.Log("Boot");
            trippleJump= true;
         }
         if (other.gameObject.tag == "Magnet") {
             magnetState = true;
+            StartCoroutine(ReturnMagnetState());
         }
         if (other.gameObject.tag == "Flash") {
             flashState = true;
@@ -289,7 +310,7 @@ public class MovePlayer : MonoBehaviour {
         }
 
         if (other.gameObject.tag=="Ground") {
-            _audioController.PlayOneShot(groundedSounds[Random.Range(0,groundedSounds.Length)],Managers._audioManager.SoundEffectVolume*0.2f*_fallingForce);
+            _audioController.PlayOneShot(groundedSounds[Random.Range(0,groundedSounds.Length)],Managers._audioManager.SoundEffectVolume*_fallingForce);
             _fallingForce = 0;
         }
     }
@@ -307,25 +328,28 @@ public class MovePlayer : MonoBehaviour {
                 }
                 ChangeColor();
                 jump = true;
+                StartCoroutine(DefaultJumpEffect());//start derfault Jump Effect
                 break;
 
             case State.JetPack:
                 if (_charcontroller.isGrounded == false && secondJump == true) {
                     if (trippleJump==true) {
-                        StartCoroutine(JumpEffect());
+                        StartCoroutine(SecondJumpEffect());
                         trippleJump = false;
                         doubleJump = true;
                     }
+                   
                     return;
                 }
                 if (_charcontroller.isGrounded == false) {
-                    StartCoroutine(JumpEffect());
+                    StartCoroutine(SecondJumpEffect());
                     doubleJump = true;
                     return;
                 }
                 ChangeColor();
                 jump = true;
-               
+                StartCoroutine(DefaultJumpEffect());//start derfault Jump Effect
+
                 break;
 
         }
@@ -376,7 +400,7 @@ public class MovePlayer : MonoBehaviour {
             case 1:
                 playerMesh.material = green;
                 _CharacterMaterial.SetColor("_Color", green.color);
-                _SmokeMaterial.SetColor("_TintColor", green.color);
+                _SmokeMaterial.SetColor("_TintColor", green.color * new Color(1, 1, 1, 0.7f));
                
              //   Debug.Log(_SmokeMaterial.color);
                 color = Colors.Green;
@@ -384,7 +408,7 @@ public class MovePlayer : MonoBehaviour {
             case 2:
                 playerMesh.material = blue;
                 _CharacterMaterial.SetColor("_Color", blue.color);
-                _SmokeMaterial.SetColor("_TintColor", blue.color);
+                _SmokeMaterial.SetColor("_TintColor", blue.color * new Color(1, 1, 1, 0.7f));
                
              //   Debug.Log(_SmokeMaterial.color);
                 color = Colors.Blue;
@@ -393,7 +417,7 @@ public class MovePlayer : MonoBehaviour {
             case 3:
                 playerMesh.material = red;
                 _CharacterMaterial.SetColor("_Color", red.color);
-                _SmokeMaterial.SetColor("_TintColor", red.color);
+                _SmokeMaterial.SetColor("_TintColor", red.color*new Color(1,1,1,0.7f));
                 
             //    Debug.Log(_SmokeMaterial.color);
                 color = Colors.Red;
@@ -401,7 +425,7 @@ public class MovePlayer : MonoBehaviour {
             case 4:
                 playerMesh.material = black;
                 _CharacterMaterial.SetColor("_Color", black.color);
-                _SmokeMaterial.SetColor("_TintColor", Color.grey);
+                _SmokeMaterial.SetColor("_TintColor", Color.grey * new Color(1, 1, 1, 0.7f));
               
             //    Debug.Log(_SmokeMaterial.color);
                 color = Colors.Black;
@@ -409,7 +433,7 @@ public class MovePlayer : MonoBehaviour {
             case 5:
                 playerMesh.material = yellow;
                 _CharacterMaterial.SetColor("_Color", yellow.color);
-                _SmokeMaterial.SetColor("_TintColor", yellow.color);
+                _SmokeMaterial.SetColor("_TintColor", yellow.color * new Color(1, 1, 1, 0.7f));
                
               //  Debug.Log(_SmokeMaterial.color);
                 color = Colors.Yellow;
@@ -417,7 +441,7 @@ public class MovePlayer : MonoBehaviour {
             case 10:
                 playerMesh.material = red;
                 _CharacterMaterial.SetColor("_Color", red.color);
-                _SmokeMaterial.SetColor("_TintColor", red.color);
+                _SmokeMaterial.SetColor("_TintColor", red.color * new Color(1, 1, 1, 0.7f));
 
                 //  Debug.Log(_SmokeMaterial.color);
                 color = Colors.Red;
@@ -432,10 +456,20 @@ public class MovePlayer : MonoBehaviour {
         return values[UnityEngine.Random.Range(0,values.Length)];
     }
 
-    IEnumerator JumpEffect() {
-        jumpEffect.SetActive(true);
-        yield return new WaitForSeconds(0.09f);
-        jumpEffect.SetActive(false);
+    IEnumerator DefaultJumpEffect() {
+        _jumpEffect.SetActive(true);
+        _jumpeffectTrans.position = playerTrans.position + Vector3.forward;
+        yield return new WaitForSeconds(0.5f);
+        _jumpEffect.SetActive(false);
+    }
+
+    IEnumerator SecondJumpEffect() {
+     // doubleJumpEffect.SetActive(true);
+        _doubleJumpEffect.SetActive(true);
+        _doubleJumpTrans.position= playerTrans.position + Vector3.forward+Vector3.up*0.5f;
+        yield return new WaitForSeconds(0.5f);
+      //  doubleJumpEffect.SetActive(false);
+        _doubleJumpEffect.SetActive(false);
 
     }
 
@@ -449,11 +483,20 @@ public class MovePlayer : MonoBehaviour {
     IEnumerator ReturnDefaultSpeed(float defspeed) {
         _speed = _speed *2f;
         _lightningSphere.SetActive(true);
-        yield return new WaitForSeconds(Managers._itemManager.Flash+1);
-        _lightningSphere.SetActive(false);
+        _speedEffect.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        _speedEffect.SetActive(false);
         _speed = defspeed;
+        yield return new WaitForSeconds(Managers._itemManager.Flash+2);
+        _lightningSphere.SetActive(false);
+       
         flashState = false;
       //  Debug.Log("Return Default Speed");
+    }
+
+    IEnumerator ReturnMagnetState() {
+        yield return new WaitForSeconds(Managers._itemManager.Magnet+2);
+        magnetState = false;
     }
 
     public void RedButton() {
