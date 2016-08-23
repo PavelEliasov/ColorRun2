@@ -255,6 +255,7 @@ public class PlatformScript : MonoBehaviour {
                 Debug.Log("Colors not Equal");
                 if (player.flashState==false) {
                     SceneController.Instance.RemoveLife();
+                    player.Damaged();
                 }
                 SceneController.Instance.ChangeScore(-5);
                

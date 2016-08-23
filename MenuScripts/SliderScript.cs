@@ -52,7 +52,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
     int move_left_step=0;
     int move_down_step = 0;
     int move_up_step = 0;
-
+    int dragStepHor;
     MoveSlide _slideForScale;
     MoveSlide _slideForUnscale;
     // Use this for initialization
@@ -78,6 +78,9 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
 
     }
     void Start () {
+        dragStepHor = (int)Mathf.Round( Screen.width/800f)*4;
+
+        Debug.Log(Screen.width);
         //testarray = new int[8];
         //for (int i=0;i<testarray.Length;++i) {
         //    testarray[i] = i;
@@ -113,7 +116,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
         }
         #region  Horizontal Orientation
         if (Orient == Orientation.horizontal) {
-            imagestep =Mathf.Round( imagestep * (Screen.width / 1080f));
+           // imagestep =Mathf.Round( imagestep * (Screen.width / 1080f));
             if (UpButton != null && DownButton != null) {
                 RightButton.onClick.AddListener(MoveRightButton);
                 LeftButton.onClick.AddListener(MoveLeftButton);
@@ -737,11 +740,11 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
         }
 
         if (Orient == Orientation.horizontal) {
-            if (drag_start_position.x - drag_end_position.x > 0 && right == false) {
+            if (drag_start_position.x - drag_end_position.x > dragStepHor && right == false) {
                 left = true;
                 enddrag = true;
             }
-            if (drag_start_position.x - drag_end_position.x < 0 && left == false) {
+            if (drag_start_position.x - drag_end_position.x < -dragStepHor && left == false) {
                 enddrag = true;
                 right = true;
 

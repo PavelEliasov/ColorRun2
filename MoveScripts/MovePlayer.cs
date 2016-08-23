@@ -82,7 +82,15 @@ public class MovePlayer : MonoBehaviour {
 
     public AudioClip[] groundedSounds;
     public AudioClip jumpsound;
-
+    public AudioClip doubleJumpSound;
+    [SerializeField]
+    AudioClip damagedSound;
+    [SerializeField]
+    AudioClip collectBank;
+    [SerializeField]
+    AudioClip collectflash;
+    [SerializeField]
+    AudioClip dropBall;
 
     Vector3 startPos;
     Vector3 movement;
@@ -95,6 +103,23 @@ public class MovePlayer : MonoBehaviour {
     Transform _jumpeffectTrans;
     GameObject _doubleJumpEffect;
     Transform _doubleJumpTrans;
+
+    public float FallingForce  {
+        get     {
+            return _fallingForce;
+        }
+
+        set {
+            if (value >= 1) {
+                _fallingForce = 1f;
+            }
+            else {
+                _fallingForce = value;
+            }
+            
+        }
+    }
+
     // public Material[] aMaterials;
     void Start() {
         Time.timeScale = 1;
@@ -183,22 +208,28 @@ public class MovePlayer : MonoBehaviour {
         //acceleration.text = Input.acceleration.x.ToString();
 
         if ((_charcontroller.isGrounded && jump == true) || doubleJump==true) { // ||  (grounded == true && Input.GetKeyDown(KeyCode.Space))) {
-            if (doubleJump==true) {
+            if (doubleJump == true) {
                 animator.SetBool("DoubleJump", true);
                 secondJump = true;
+                _audioController.PlayOneShot(doubleJumpSound, Managers._audioManager.SoundEffectVolume);
+            }
+            else {
+                _audioController.PlayOneShot(jumpsound, Managers._audioManager.SoundEffectVolume);
+               
             }
             
             doubleJump = false;
-            _audioController.PlayOneShot(jumpsound,Managers._audioManager.SoundEffectVolume);
 
-         
-           
+            animator.SetBool("Jump", true);
+
+
 
             // jump = true;
             //  Debug.Log("jump");
             // playerRigidBody.AddForce(Vector3.up*_jumpForce,ForceMode.Impulse);
-            animator.SetBool("Jump",true);
-          //  DustParticle.SetActive(false);
+
+
+            //  DustParticle.SetActive(false);
             Smoke.SetActive(true);
 
             if (Managers._itemManager.DressOnSkate) {
@@ -237,7 +268,7 @@ public class MovePlayer : MonoBehaviour {
 
         if (_charcontroller.isGrounded == false) {
             _verticalSpeed += _gravity *2 * Time.deltaTime;
-            _fallingForce += Time.deltaTime;
+            FallingForce += Time.deltaTime;
 
           //  Debug.Log(_fallingForce);
             if (_verticalSpeed <= _gravity) {
@@ -255,7 +286,7 @@ public class MovePlayer : MonoBehaviour {
         movement *= Time.deltaTime;
         _charcontroller.Move(movement);
 
-        if (_fallingForce>=0.3f) {
+        if (FallingForce>=0.3f) {
             Smoke.SetActive(false);
            // Debug.Log("Stop Smoke");
         }
@@ -292,29 +323,35 @@ public class MovePlayer : MonoBehaviour {
         // Debug.Log("TriggerEnter");
         if (other.gameObject.tag == "Boot") {
             Debug.Log("Boot");
-           trippleJump= true;
+            Destroy(other.gameObject);
+            trippleJump = true;
         }
         if (other.gameObject.tag == "Magnet") {
             magnetState = true;
             StartCoroutine(ReturnMagnetState());
         }
         if (other.gameObject.tag == "Flash") {
-            flashState = true;
+            _audioController.PlayOneShot(collectflash, Managers._audioManager.SoundEffectVolume);
+           flashState = true;
             StartCoroutine(ReturnDefaultSpeed(_speed));
         }
 
         if (other.gameObject.tag == "Bank") {
             SceneController.Instance.stats.Banks++;
+            _audioController.PlayOneShot(collectBank, Managers._audioManager.SoundEffectVolume);
             //stat.Stars++;
             Destroy(other.gameObject);
         }
 
         if (other.gameObject.tag=="Ground") {
-            _audioController.PlayOneShot(groundedSounds[Random.Range(0,groundedSounds.Length)],Managers._audioManager.SoundEffectVolume*_fallingForce);
-            _fallingForce = 0;
+            _audioController.PlayOneShot(groundedSounds[Random.Range(0,groundedSounds.Length)],Managers._audioManager.SoundEffectVolume*FallingForce);
+            FallingForce = 0;
         }
     }
 
+    public void Damaged() {
+        _audioController.PlayOneShot(damagedSound, Managers._audioManager.SoundEffectVolume);
+    }
 
 
     public void Jump() {//Call from JumpButton
@@ -528,6 +565,7 @@ public class MovePlayer : MonoBehaviour {
         if (_charcontroller.isGrounded) {
             return;
         }
+        _audioController.PlayOneShot(dropBall, Managers._audioManager.SoundEffectVolume);
         var ball = Instantiate(PaintBall, playerTrans.position+Vector3.forward*0.5f, Quaternion.identity) as GameObject;
         ball.GetComponent<PaintBall>().ChangeColor(color, colorName, ballDirect, playerTrans.position);
     }

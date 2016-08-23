@@ -12,9 +12,16 @@ public class MenuController : MonoBehaviour {
 
     [SerializeField]
     GameObject[] dots;
+
+    [SerializeField]
+    Text Time;
 	// Use this for initialization
 	void Start () {
+        UnityEngine.Time.timeScale = 1;
         totalBanks.text = "X " + Managers._gameManager.TotalBanks.ToString();
+        if (Managers._gameManager.statistics.ContainsKey(1) && Managers._gameManager.statistics[1]!=null) {
+            Time.text = Managers._gameManager.statistics[1].Time.ToString();
+        }
 	}
 	
 	// Update is called once per frame
@@ -23,7 +30,7 @@ public class MenuController : MonoBehaviour {
 	}
 
     public void LoadScene() {
-        Managers._audioManager.SoundEffectVolume = 0.9f;
+       // Managers._audioManager.SoundEffectVolume = 0.9f;
         StartCoroutine(LoadSceneAsyn(Managers._gameManager._selectedScene.ToString()));
         //SceneManager.LoadScene(Managers._gameManager._selectedScene.ToString());
     }
@@ -74,6 +81,10 @@ public class MenuController : MonoBehaviour {
         }
 
 
+    }
+
+    public void GoToMainMenu() {
+        SceneManager.LoadScene("MainMenu");
     }
 
 }

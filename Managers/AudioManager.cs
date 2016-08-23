@@ -24,6 +24,7 @@ public class AudioManager : MonoBehaviour,IGameManager {
             return _soundEffectVolume; }
         set {
             _soundEffectVolume = value;
+
             AudioListener.volume = _soundEffectVolume;
            
         }
@@ -42,6 +43,9 @@ public class AudioManager : MonoBehaviour,IGameManager {
         get { return _musicVolume; }
         set {
             _musicVolume = value;
+            if (_audioSource==null) {
+                _audioSource = GetComponent<AudioSource>();
+            }
             _audioSource.volume = _musicVolume;
         }
     }

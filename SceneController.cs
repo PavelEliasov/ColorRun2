@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour {
     static SceneController _instance;
     [SerializeField]
-    Text scoreText;
+    Text Time;
     [SerializeField]
     Image[] lifeImages;
 
@@ -48,6 +48,7 @@ public class SceneController : MonoBehaviour {
     [Header("Music")]
     [SerializeField]
     AudioClip SceneMusic;
+ 
 
     private DieElement[] dieElements;
 
@@ -56,6 +57,8 @@ public class SceneController : MonoBehaviour {
     int _lifecount=3;
 
     int sceneNumber;
+
+    bool endofLvl;
 
     public static SceneController Instance {
         get  {
@@ -109,9 +112,13 @@ public class SceneController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (endofLvl==false) {
+            Time.text = UnityEngine.Time.timeSinceLevelLoad.ToString();
+        }
+        
       //  Debug.Log(stats.Time);
-        //Debug.Log(stats.Stars);
-	}
+      //Debug.Log(stats.Stars);
+    }
 
     void OnDestroy() {
         Managers._gameManager.sceneNumber = sceneNumber;
@@ -120,7 +127,7 @@ public class SceneController : MonoBehaviour {
     public void ChangeScore(float value) {
         _score += value;
         _score = _score < 0 ? 0 : _score;
-        scoreText.text = _score.ToString();
+      //  scoreText.text = _score.ToString();
 
     }
 
@@ -161,10 +168,15 @@ public class SceneController : MonoBehaviour {
        
     }
      void LevelComplete() {
+     
+        endofLvl = true;
         CountStars();
-
+        stats.Time= UnityEngine.Time.timeSinceLevelLoad;
+        if (SceneManager.GetActiveScene().name == "2") {
+            stats.Time=23.00f;
+        }
         // StopCoroutine(Timer());
-        stats.Time =(float) System.Math.Round((double)stats.Time,2);
+        stats.Time =(float) System.Math.Round((double)stats.Time,2,System.MidpointRounding.AwayFromZero);
         Managers._gameManager.Stats(sceneNumber, stats);
 
         Debug.Log(stats.Time);
@@ -202,11 +214,12 @@ public class SceneController : MonoBehaviour {
 
     }
     IEnumerator Timer() {
-        yield return null;
+       // yield return null;
         while (true) {
-            stats.Time += 0.1f;
-            
-            yield return new WaitForSeconds(0.1f);
+            stats.Time += 0.01f;
+           // Time.text = stats.Time.ToString();
+            Debug.Log(stats.Time);
+            yield return new WaitForSeconds(0.01f);
         }
 
     }
@@ -220,7 +233,7 @@ public class SceneController : MonoBehaviour {
             element.EnableRigidbody();
         }
         yield return new WaitForSeconds(0.3f);
-        _player.tag = "Player";//set player tag to "Untagged" for disable collisions
+       
         _playerAnimator.enabled = true;
        // _player.enabled = false;
         foreach (DieElement element in dieElements) {
@@ -230,6 +243,8 @@ public class SceneController : MonoBehaviour {
            
             //element.ReturnForm();
         }
+        yield return new WaitForSeconds(0.1f);
+        _player.tag = "Player";//
 
     }
     public void RestartLevel() {

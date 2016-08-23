@@ -52,7 +52,7 @@ public class MarketSlider : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     int move_left_step = 0;
     int move_down_step = 0;
     int move_up_step = 0;
-
+    int dragStepVer;
     MoveSlide _slideForScale;
     MoveSlide _slideForUnscale;
     // Use this for initialization
@@ -78,6 +78,9 @@ public class MarketSlider : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     }
     void Start() {
+        dragStepVer = (int)Mathf.Round(Screen.height / 480f) * 5;
+
+        Debug.Log(dragStepVer);
         //testarray = new int[8];
         //for (int i=0;i<testarray.Length;++i) {
         //    testarray[i] = i;
@@ -615,11 +618,11 @@ public class MarketSlider : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         drag = false;
         drag_end_position = Input.mousePosition;
         if (Orient == Orientation.vertical) {
-            if (drag_start_position.y - drag_end_position.y > 0 && up == false) {
+            if (drag_start_position.y - drag_end_position.y > dragStepVer && up == false) {
                 down = true;
                 enddrag = true;
             }
-            if (drag_start_position.y - drag_end_position.y < 0 && down == false) {
+            if (drag_start_position.y - drag_end_position.y < -dragStepVer && down == false) {
                 up = true;
                 enddrag = true;
             }

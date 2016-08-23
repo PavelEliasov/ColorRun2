@@ -102,6 +102,10 @@ public class GameManager : MonoBehaviour {
             JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("AudioManager"), Managers._audioManager);
             // Managers._itemManager = JsonUtility.FromJson<ItemManager>(PlayerPrefs.GetString("ItemManager"));
         }
+        else {
+            Managers._audioManager.MusicVolume = 0.7f;
+            Managers._audioManager.SoundEffectVolume = 0.8f;
+        }
 
        // CalculateTotalSumOfBanks();
 

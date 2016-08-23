@@ -32,6 +32,11 @@ public class MainMenuController : MonoBehaviour {
 
     }
 
+    public void Exit() {
+        Application.Quit();
+        //SceneManager.LoadScene("Equipment");
+
+    }
     IEnumerator Loader(string sceneName) {
         yield return new WaitForSeconds(0.09f);
         SceneManager.LoadScene(sceneName);

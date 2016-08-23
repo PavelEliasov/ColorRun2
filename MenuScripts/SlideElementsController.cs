@@ -12,9 +12,17 @@ public class SlideElementsController : MonoBehaviour {
     [SerializeField]
     Image _lock;
     [SerializeField]
-    Text time;
+    Text timeSec;
     [SerializeField]
-    Text banks;
+    Text timeSec2;
+    [SerializeField]
+    Text timeMSec;
+    [SerializeField]
+    Text timeMSec2;
+    [SerializeField]
+    Text banksDec;
+    [SerializeField]
+    Text banksUnits;
     [SerializeField]
     Image firstStar;
     [SerializeField]
@@ -22,6 +30,7 @@ public class SlideElementsController : MonoBehaviour {
     [SerializeField]
     Image thirdStar;
 
+    string[] time=new string[2];
     bool interactable;
     // Use this for initialization
     void Start () {
@@ -44,8 +53,43 @@ public class SlideElementsController : MonoBehaviour {
 
               //  Debug.Log(Managers._gameManager.statistics[sceneNumber].Stars);
               //  Debug.Log(Managers._gameManager.statistics[sceneNumber].Time);
-                banks.text ="X"+" "+ Managers._gameManager.statistics[sceneNumber].Banks.ToString();
-                time.text="Time: "+ Managers._gameManager.statistics[sceneNumber].Time.ToString();
+                banksDec.text =Managers._gameManager.statistics[sceneNumber].Banks.ToString();
+                if (Managers._gameManager.statistics[sceneNumber].Banks > 9) {
+                    banksDec.text = Managers._gameManager.statistics[sceneNumber].Banks.ToString().ToCharArray()[0].ToString();
+                    banksUnits.text = Managers._gameManager.statistics[sceneNumber].Banks.ToString().ToCharArray()[1].ToString();
+                }
+                else {
+                    banksDec.text = "0";
+                    banksUnits.text = Managers._gameManager.statistics[sceneNumber].Banks.ToString();
+                }
+               // timeSec.text=Managers._gameManager.statistics[sceneNumber].Time.ToString();
+                time = Managers._gameManager.statistics[sceneNumber].Time.ToString().Split('.');
+
+                Debug.Log(Managers._gameManager.statistics[sceneNumber].Time.ToString());
+                timeSec.text = time[0].ToCharArray()[0].ToString(); //separate string value of time 
+                timeSec2.text = time[0].ToCharArray()[1].ToString();
+
+                if (time.Length < 2) {
+                    timeMSec.text = "0";
+                    timeMSec2.text = "0";
+                }
+                else {
+                    timeMSec.text = time[1].ToCharArray()[0].ToString();
+
+                    if (time[1].ToCharArray().Length < 2) {
+                        timeMSec2.text = "0";
+                    }
+                    else {
+                        timeMSec2.text = time[1].ToCharArray()[1].ToString();
+                    }
+                    
+                }
+               
+
+                // Debug.Log(time[1].ToCharArray()[0].ToString());
+               
+               
+              //  Debug.Log(time[0]);
                 switch (Managers._gameManager.statistics[sceneNumber].Stars) {
                   
                     case 1:
@@ -71,16 +115,16 @@ public class SlideElementsController : MonoBehaviour {
         playButton.SetActive(false);
         playButton.GetComponent<Button>().interactable = false;
         interactable = false;
-        time.gameObject.SetActive(false);
-        banks.gameObject.SetActive(false);
+       // timeSec.gameObject.SetActive(false);
+        banksDec.gameObject.SetActive(false);
         firstStar.gameObject.SetActive(false);
         secondStar.gameObject.SetActive(false);
         thirdStar.gameObject.SetActive(false);
     }
     void EnableElements() {
         playButton.SetActive(true);
-        time.gameObject.SetActive(true);
-        banks.gameObject.SetActive(true);
+        timeSec.gameObject.SetActive(true);
+        banksDec.gameObject.SetActive(true);
     }
 	
 	// Update is called once per frame
