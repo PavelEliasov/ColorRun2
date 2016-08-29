@@ -7,8 +7,10 @@ public class CameraFallow : MonoBehaviour {
    // [SerializeField]
      public Transform player;
      Transform cameraTrans;
+    RippleEffect _rippleEffect;
 	// Use this for initialization
 	void Start () {
+        _rippleEffect = GetComponent<RippleEffect>();
         cameraTrans = GetComponent<Transform>();
         cameraTrans.position = GetComponent<Transform>().position;
 
@@ -25,5 +27,16 @@ public class CameraFallow : MonoBehaviour {
         cameraTrans.DOMoveZ(player.position.z,2f);
         cameraTrans.DOMoveY(player.position.y+1, 2f);
 
+    }
+
+    public void Jump() {
+        _rippleEffect.enabled = true;
+        StartCoroutine(DisableRipple());
+
+    }
+
+    IEnumerator DisableRipple() {
+        yield return new WaitForSeconds(0.4f);
+        _rippleEffect.enabled = false;
     }
 }

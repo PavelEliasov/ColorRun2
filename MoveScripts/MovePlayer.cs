@@ -19,7 +19,7 @@ public class MovePlayer : MonoBehaviour {
     }
     // Use this for initialization
     // public LayerMask whatIsGround;
-
+    RippleEffect _postEffect;
     //[SerializeField]
     //public GameObject doubleJumpEffect;
     [SerializeField]
@@ -122,6 +122,7 @@ public class MovePlayer : MonoBehaviour {
 
     // public Material[] aMaterials;
     void Start() {
+        _postEffect = FindObjectOfType<RippleEffect>();
         Time.timeScale = 1;
         _jumpEffect = JumpEffect.Instance.gameObject;
         _jumpeffectTrans = _jumpEffect.transform;
@@ -332,7 +333,8 @@ public class MovePlayer : MonoBehaviour {
         }
         if (other.gameObject.tag == "Flash") {
             _audioController.PlayOneShot(collectflash, Managers._audioManager.SoundEffectVolume);
-           flashState = true;
+            flashState = true;
+            _postEffect.EmitEffectFlash(playerTrans.position);
             StartCoroutine(ReturnDefaultSpeed(_speed));
         }
 
@@ -340,6 +342,7 @@ public class MovePlayer : MonoBehaviour {
             SceneController.Instance.stats.Banks++;
             _audioController.PlayOneShot(collectBank, Managers._audioManager.SoundEffectVolume);
             //stat.Stars++;
+            _postEffect.EmitEffectBank(playerTrans.position);
             Destroy(other.gameObject);
         }
 

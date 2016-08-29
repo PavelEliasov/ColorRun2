@@ -30,12 +30,12 @@ public class MoveSlide : MonoBehaviour {
        slideTrans.DOLocalMoveX(step, 0.3f,true);
     }
     public void MoveUp(float step) {
-        slideTrans.DOLocalMoveY(step, 0.3f, true);
+        slideTrans.DOLocalMoveY(step, 0.2f, true);
     }
 
     public void MoveDown(float step) {
 
-        slideTrans.DOLocalMoveY(step, 0.3f, true);
+        slideTrans.DOLocalMoveY(step, 0.2f, true);
     }
 
     public void Scale(Vector3 scaleValue) {

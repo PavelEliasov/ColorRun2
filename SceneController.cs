@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.EventSystems;
 public class SceneController : MonoBehaviour {
     static SceneController _instance;
     [SerializeField]
@@ -72,6 +72,9 @@ public class SceneController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        if (Screen.width>1920) {
+            EventSystem.current.pixelDragThreshold = 20;
+        }
         if (Managers._audioManager._audioSource!=null) {
             Managers._audioManager.PlayMusic(SceneMusic);
         }
@@ -218,7 +221,7 @@ public class SceneController : MonoBehaviour {
         while (true) {
             stats.Time += 0.01f;
            // Time.text = stats.Time.ToString();
-            Debug.Log(stats.Time);
+           // Debug.Log(stats.Time);
             yield return new WaitForSeconds(0.01f);
         }
 
@@ -252,5 +255,9 @@ public class SceneController : MonoBehaviour {
     }
     public void ReturnToMenu() {
         SceneManager.LoadScene("Menu");
+    }
+
+    public void UnscaleTime() {
+        UnityEngine.Time.timeScale = 1;
     }
 }
