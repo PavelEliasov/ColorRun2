@@ -43,6 +43,7 @@ public class MovePlayer : MonoBehaviour {
     public float _gravity;
     float _verticalSpeed;
     float _fallingForce;
+    float _soundEffectVolume;
     [HideInInspector]
     public string color;
 
@@ -73,10 +74,16 @@ public class MovePlayer : MonoBehaviour {
 
     public bool magnetState;
     public bool flashState;
+
+    [Header ("Effects")]
     [SerializeField]
     GameObject _lightningSphere;
     [SerializeField]
     GameObject _speedEffect;
+    [SerializeField]
+    GameObject _bootEffect;
+    [SerializeField]
+    GameObject _magnetEffect;
 
     public bool bootState;
 
@@ -89,6 +96,10 @@ public class MovePlayer : MonoBehaviour {
     AudioClip collectBank;
     [SerializeField]
     AudioClip collectflash;
+    [SerializeField]
+    AudioClip collectBoot;
+    [SerializeField]
+    AudioClip collectMagnet;
     [SerializeField]
     AudioClip dropBall;
 
@@ -149,6 +160,7 @@ public class MovePlayer : MonoBehaviour {
         _audioController = GetComponent<AudioSource>();
         CheckState();
         Debug.Log(playerTrans.localRotation);
+        _soundEffectVolume = Managers._audioManager.SoundEffectVolume;
     }
 
     void OnDestroy() {
@@ -212,10 +224,10 @@ public class MovePlayer : MonoBehaviour {
             if (doubleJump == true) {
                 animator.SetBool("DoubleJump", true);
                 secondJump = true;
-                _audioController.PlayOneShot(doubleJumpSound, Managers._audioManager.SoundEffectVolume);
+                _audioController.PlayOneShot(doubleJumpSound, _soundEffectVolume);
             }
             else {
-                _audioController.PlayOneShot(jumpsound, Managers._audioManager.SoundEffectVolume);
+                _audioController.PlayOneShot(jumpsound, _soundEffectVolume);
                
             }
             
@@ -323,37 +335,43 @@ public class MovePlayer : MonoBehaviour {
         // Debug.Log(other.gameObject.tag);
         // Debug.Log("TriggerEnter");
         if (other.gameObject.tag == "Boot") {
-            Debug.Log("Boot");
+            _audioController.PlayOneShot(collectBoot, _soundEffectVolume);
+           // Debug.Log("Boot");
             Destroy(other.gameObject);
+            _bootEffect.SetActive(true);
             trippleJump = true;
         }
         if (other.gameObject.tag == "Magnet") {
             magnetState = true;
+            _audioController.PlayOneShot(collectMagnet, _soundEffectVolume);
+            _magnetEffect.SetActive(true);
             StartCoroutine(ReturnMagnetState());
         }
         if (other.gameObject.tag == "Flash") {
-            _audioController.PlayOneShot(collectflash, Managers._audioManager.SoundEffectVolume);
+            _audioController.PlayOneShot(collectflash, _soundEffectVolume);
             flashState = true;
+            _postEffect.enabled = true;
             _postEffect.EmitEffectFlash(playerTrans.position);
             StartCoroutine(ReturnDefaultSpeed(_speed));
         }
 
         if (other.gameObject.tag == "Bank") {
             SceneController.Instance.stats.Banks++;
-            _audioController.PlayOneShot(collectBank, Managers._audioManager.SoundEffectVolume);
+            _audioController.PlayOneShot(collectBank,_soundEffectVolume);
             //stat.Stars++;
-            _postEffect.EmitEffectBank(playerTrans.position);
-            Destroy(other.gameObject);
+          //  _postEffect.enabled = true;
+          //  _postEffect.EmitEffectBank(playerTrans.position);
+          //  Destroy(other.gameObject);
         }
 
         if (other.gameObject.tag=="Ground") {
-            _audioController.PlayOneShot(groundedSounds[Random.Range(0,groundedSounds.Length)],Managers._audioManager.SoundEffectVolume*FallingForce);
+            _audioController.PlayOneShot(groundedSounds[Random.Range(0,groundedSounds.Length)],_soundEffectVolume*FallingForce);
             FallingForce = 0;
         }
     }
 
     public void Damaged() {
-        _audioController.PlayOneShot(damagedSound, Managers._audioManager.SoundEffectVolume);
+        _audioController.PlayOneShot(damagedSound, _soundEffectVolume);
     }
 
 
@@ -375,6 +393,7 @@ public class MovePlayer : MonoBehaviour {
                 if (_charcontroller.isGrounded == false && secondJump == true) {
                     if (trippleJump==true) {
                         StartCoroutine(SecondJumpEffect());
+                        _bootEffect.SetActive(false);
                         trippleJump = false;
                         doubleJump = true;
                     }
@@ -536,6 +555,7 @@ public class MovePlayer : MonoBehaviour {
 
     IEnumerator ReturnMagnetState() {
         yield return new WaitForSeconds(Managers._itemManager.Magnet+2);
+        _magnetEffect.SetActive(false);
         magnetState = false;
     }
 

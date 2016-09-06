@@ -8,6 +8,8 @@ public class SceneController : MonoBehaviour {
     [SerializeField]
     Text Time;
     [SerializeField]
+    Sprite brokenHeart;
+    [SerializeField]
     Image[] lifeImages;
 
     [SerializeField]
@@ -137,7 +139,8 @@ public class SceneController : MonoBehaviour {
     public void RemoveLife() {
         
 
-        lifeImages[_lifecount-1].enabled = false;
+       // lifeImages[_lifecount-1].enabled = false;
+        lifeImages[_lifecount - 1].sprite = brokenHeart;
         _lifecount--;
 
         if (_lifecount==0) {

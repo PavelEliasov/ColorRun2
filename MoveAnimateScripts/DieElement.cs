@@ -29,7 +29,7 @@ public class DieElement : MonoBehaviour {
         Lose = new LoseHeart(ReturnForm);
         Lose += new LoseHeart(LoseHP);
 
-        Debug.Log(_rigidBody);
+      //  Debug.Log(_rigidBody);
     }
 	
 	// Update is called once per frame

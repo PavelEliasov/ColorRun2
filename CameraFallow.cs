@@ -29,14 +29,14 @@ public class CameraFallow : MonoBehaviour {
 
     }
 
-    public void Jump() {
-        _rippleEffect.enabled = true;
-        StartCoroutine(DisableRipple());
+    //public void Jump() {
+    //    _rippleEffect.enabled = true;
+    //    StartCoroutine(DisableRipple());
 
-    }
+    //}
 
-    IEnumerator DisableRipple() {
-        yield return new WaitForSeconds(0.4f);
-        _rippleEffect.enabled = false;
-    }
+    //IEnumerator DisableRipple() {
+    //    yield return new WaitForSeconds(0.4f);
+    //    _rippleEffect.enabled = false;
+    //}
 }

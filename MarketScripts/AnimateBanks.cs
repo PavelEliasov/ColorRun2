@@ -7,17 +7,20 @@ public class AnimateBanks : MonoBehaviour {
     Transform bankTrans;
     Vector3 startPos;
     SpriteRenderer bankSprite;
+    MeshRenderer meshrenderer;
 	// Use this for initialization
 	void Start () {
   
 	}
 
     void OnEnable() {
-        bankSprite = GetComponent<SpriteRenderer>();
+       // bankSprite = GetComponent<SpriteRenderer>();
+        meshrenderer = GetComponent<MeshRenderer>();
+        meshrenderer.enabled = true;
         _playerTrans = FindObjectOfType<MovePlayer>().GetComponent<Transform>();
         bankTrans = GetComponent<Transform>();
         startPos = bankTrans.localPosition;
-        bankSprite.enabled = true;
+        //bankSprite.enabled = true;
         bankTrans.DOLocalMove(_playerTrans.position+Vector3.up*0.5f,1f);
       
     }
@@ -37,7 +40,8 @@ public class AnimateBanks : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag=="Player") {
-            bankSprite.enabled = false;
+          //  bankSprite.enabled = false;
+            meshrenderer.enabled = false;
         }
     }
 }

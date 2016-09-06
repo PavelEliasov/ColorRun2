@@ -157,7 +157,11 @@ public class GameManager : MonoBehaviour {
 	}
 
     public void Stats(int scene,Statistic stats) {
-        _levelsComplete = scene;
+
+        if (scene>_levelsComplete) {
+            _levelsComplete = scene;
+        }
+       // _levelsComplete = scene;
        
         if (statistics.ContainsKey(scene)) {
             if (stats.Banks>statistics[scene].Banks) {

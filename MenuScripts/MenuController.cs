@@ -15,6 +15,12 @@ public class MenuController : MonoBehaviour {
 
     [SerializeField]
     Text Time;
+
+    AudioSource audiosource;
+    [SerializeField]
+    AudioClip click;
+
+    float volume;
 	// Use this for initialization
 	void Start () {
         UnityEngine.Time.timeScale = 1;
@@ -22,6 +28,8 @@ public class MenuController : MonoBehaviour {
         if (Managers._gameManager.statistics.ContainsKey(1) && Managers._gameManager.statistics[1]!=null) {
             Time.text = Managers._gameManager.statistics[1].Time.ToString();
         }
+        audiosource = GetComponent<AudioSource>();
+        volume = Managers._audioManager.SoundEffectVolume;
 	}
 	
 	// Update is called once per frame
@@ -30,7 +38,8 @@ public class MenuController : MonoBehaviour {
 	}
 
     public void LoadScene() {
-       // Managers._audioManager.SoundEffectVolume = 0.9f;
+        // Managers._audioManager.SoundEffectVolume = 0.9f;
+        audiosource.PlayOneShot(click,volume);
         StartCoroutine(LoadSceneAsyn(Managers._gameManager._selectedScene.ToString()));
         //SceneManager.LoadScene(Managers._gameManager._selectedScene.ToString());
     }
