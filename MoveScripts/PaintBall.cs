@@ -36,9 +36,9 @@ public class PaintBall : MonoBehaviour {
   }
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 
-	}
+	//}
 
    public void ChangeColor(Color color,string colorName,BallDirection direct,Vector3 startpos) {
         // fallingDirection = direct;

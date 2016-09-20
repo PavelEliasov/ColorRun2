@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
@@ -27,6 +28,9 @@ public class SceneController : MonoBehaviour {
 
     [SerializeField]
     GameObject diePanel;
+
+    [SerializeField]
+    GameObject pausePanel;
 
     MovePlayer _player;
     Animator _playerAnimator;
@@ -118,7 +122,7 @@ public class SceneController : MonoBehaviour {
 	void Update () {
 
         if (endofLvl==false) {
-            Time.text = UnityEngine.Time.timeSinceLevelLoad.ToString();
+            Time.text =string.Format("{0:00.00}",UnityEngine.Time.timeSinceLevelLoad);
         }
         
       //  Debug.Log(stats.Time);
@@ -188,7 +192,7 @@ public class SceneController : MonoBehaviour {
         Debug.Log(stats.Time);
         endOfLevelPanel.SetActive(true);
         _player.gameObject.SetActive(false);
-      //  Debug.Log(stats.Stars);
+       Debug.Log(stats.Banks);
       //  SceneManager.LoadScene("Menu");
 
       //  StartCoroutine(UnloadScene());
@@ -254,13 +258,29 @@ public class SceneController : MonoBehaviour {
 
     }
     public void RestartLevel() {
+        UnscaleTime();
         SceneManager.LoadScene(sceneNumber.ToString());
     }
     public void ReturnToMenu() {
         SceneManager.LoadScene("Menu");
     }
 
-    public void UnscaleTime() {
+     void UnscaleTime() {
         UnityEngine.Time.timeScale = 1;
+    }
+
+    void PauseTime() {
+        UnityEngine.Time.timeScale = 0;
+    }
+
+
+    public void PauseGame() {
+        PauseTime();
+        pausePanel.SetActive(true);
+
+    }
+    public void UnPausedGame() {
+        UnscaleTime();
+        pausePanel.SetActive(false);
     }
 }

@@ -8,7 +8,7 @@ public class StarAnimateMenu : MonoBehaviour {
 	void Start () {
 
         Debug.Log("Animate Stars");
-        gameObject.transform.DOShakeScale(0.5f,Vector3.one,3,1,true);
+        gameObject.transform.DOShakeScale(0.5f,Vector3.one,3,1,true).SetUpdate(true);
 	}
 	
 	

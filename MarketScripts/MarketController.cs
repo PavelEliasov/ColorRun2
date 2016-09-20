@@ -28,6 +28,14 @@ public class MarketController : MonoBehaviour {
     MovePlayer player;
     Animator _playerAnimator;
 
+    AudioSource audiosource;
+    float volume;
+    [Header("Audio")]
+    [SerializeField]
+    AudioClip buyButtonClick;
+    [SerializeField]
+    AudioClip closeButtonClick;
+
     int priceOfSelectedItem;
 
     void Awake() {
@@ -39,13 +47,15 @@ public class MarketController : MonoBehaviour {
         _playerAnimator = player.GetComponent<Animator>();
         _marketItems = FindObjectsOfType<MarketItem>();
         _playerAnimator.SetBool("Run", true);
-        _totalBanks.text ="X "+Managers._gameManager.TotalBanks.ToString();
+        _totalBanks.text =Managers._gameManager.TotalBanks.ToString();
+        audiosource = GetComponent<AudioSource>();
+        volume = Managers._audioManager.SoundEffectVolume;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
     //public void EnableEquipment(GameObject objforEnable) {
     //    _objForEnable = objforEnable;
     //    foreach (var eq in equipments) {
@@ -127,6 +137,7 @@ public class MarketController : MonoBehaviour {
     //}
 
     public void EnableQuestPanel() {
+        audiosource.PlayOneShot(buyButtonClick,volume);
         QuestPanel.SetActive(true);
         if (_selectedItem == null) {
             QuestPickItemPanel.SetActive(true);
@@ -136,14 +147,22 @@ public class MarketController : MonoBehaviour {
         }
     }
     public void CloseQuestPanel() {
+        audiosource.PlayOneShot(closeButtonClick, volume);
+        StartCoroutine(CloseQuestPanels());
+    }
+
+    IEnumerator CloseQuestPanels() {
+        yield return new WaitForSeconds(0.5f);
         QuestPanel.SetActive(false);
 
         QuestPickItemPanel.SetActive(false);
         QuestBuyPanel.SetActive(false);
         QuestNotEnoughBanksPanel.SetActive(false);
+
     }
 
     public void BuyItemFinaly() {
+        audiosource.PlayOneShot(buyButtonClick, volume);
         if (priceOfSelectedItem > Managers._gameManager.TotalBanks) {
             QuestBuyPanel.SetActive(false);
             QuestNotEnoughBanksPanel.SetActive(true);
@@ -190,7 +209,7 @@ public class MarketController : MonoBehaviour {
 
             StartCoroutine(DownCountTotalBanks());
 
-           // Managers._gameManager.SpentBanks += priceOfSelectedItem;
+            Managers._gameManager.SpentBanks += priceOfSelectedItem;
             Managers._gameManager.TotalBanks -= priceOfSelectedItem;
             CloseQuestPanel();
             
@@ -209,7 +228,7 @@ public class MarketController : MonoBehaviour {
                 step++;
                // Managers._gameManager.TotalBanks--;
                 ttlBanks--;
-                _totalBanks.text = "X " + ttlBanks;
+                _totalBanks.text =  ttlBanks.ToString();
                 yield return new WaitForSeconds(0.1f);
             }
         }
@@ -217,7 +236,7 @@ public class MarketController : MonoBehaviour {
             while (step < priceOfSelectedItem) {
                 step++;
                 ttlBanks--;
-                _totalBanks.text = "X " + ttlBanks;
+                _totalBanks.text =  ttlBanks.ToString();
                 yield return new WaitForSeconds(0.05f);
             }
         }

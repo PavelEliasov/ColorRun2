@@ -16,9 +16,9 @@ public class EnableJetpack : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag=="JetPack") {

@@ -13,11 +13,11 @@ public class AnimateButon : MonoBehaviour {
         _buttonTrans = GetComponent<Transform>();
 
     }
-	void Start () {
+	//void Start () {
       
 
 
-    }
+ //   }
 
     void OnEnable() {
         buttonSeq = DOTween.Sequence();
@@ -29,9 +29,9 @@ public class AnimateButon : MonoBehaviour {
         // buttonSeq.Kill(true);
     }
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
     void PlayBack() {
 

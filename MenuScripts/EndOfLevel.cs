@@ -11,18 +11,30 @@ public class EndOfLevel : MonoBehaviour {
     Image[] stars;
    
 	// Use this for initialization
+
 	void Start () {
+        // gameObject.transform.localEulerAngles = Vector3.back * 360;
+        //this.gameObject.transform.localScale = Vector3.one * 0.1f;
+      
+        //gameObject.transform.DOLocalRotate(Vector3.back * 360, 1f, RotateMode.FastBeyond360).SetUpdate(true);
+        //this.gameObject.transform.DOScale(Vector3.one,1f).SetEase(Ease.InExpo).SetUpdate(true);
+        //StartCoroutine(CountingBanks());
+	}
+
+    void OnEnable() {
         this.gameObject.transform.localScale = Vector3.one * 0.1f;
-       // gameObject.transform.localEulerAngles = Vector3.back * 360;
-        gameObject.transform.DOLocalRotate(Vector3.back*360,1f,RotateMode.FastBeyond360);
-        this.gameObject.transform.DOScale(Vector3.one,1f).SetEase(Ease.InExpo);
-        StartCoroutine(CountingBanks());
-	}
-	
+        // gameObject.transform.localEulerAngles = Vector3.back * 360;
+        gameObject.transform.DOLocalRotate(Vector3.back * 360, 1f, RotateMode.FastBeyond360).SetUpdate(true);
+        this.gameObject.transform.DOScale(Vector3.one, 1f).SetEase(Ease.InExpo).SetUpdate(true);
+        if (bankCount!=null) {
+            StartCoroutine(CountingBanks());
+        }
+       
+    }
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
     IEnumerator CountingBanks() {
         int banks=0;
         yield return new WaitForSeconds(1f);

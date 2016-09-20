@@ -6,14 +6,14 @@ public class EnableHelpPlane : MonoBehaviour {
     [SerializeField]
     GameObject Pointer;
 	// Use this for initialization
-	void Start () {
+	//void Start () {
 	
-	}
+	//}
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "Player") {

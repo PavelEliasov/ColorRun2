@@ -17,10 +17,10 @@ public class MoveSlide : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        //slideTrans.Translate(step,slideTrans.localPosition.y, slideTrans.localPosition.z);
-      //  slideTrans.localPosition= Vector3.MoveTowards(slideTrans.localPosition,new Vector3(step, slideTrans.localPosition.y, slideTrans.localPosition.z),5f);
-	}
+	//void Update () {
+ //       //slideTrans.Translate(step,slideTrans.localPosition.y, slideTrans.localPosition.z);
+ //     //  slideTrans.localPosition= Vector3.MoveTowards(slideTrans.localPosition,new Vector3(step, slideTrans.localPosition.y, slideTrans.localPosition.z),5f);
+	//}
     public void MoveRight(float step) {
         slideTrans.DOLocalMoveX(step, 0.3f, true);
     }

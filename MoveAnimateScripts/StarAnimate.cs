@@ -25,7 +25,7 @@ public class StarAnimate : MonoBehaviour {
 
        // Debug.Log(_player.magnetState);
         //starTrans.DOMove(new Vector3(100, 270, 100), 1f);
-        starTrans.Rotate(Vector3.up*rotateSpeed*10*Time.deltaTime);
+     //   starTrans.Rotate(Vector3.up*rotateSpeed*10*Time.deltaTime);
 
         if ((starTrans.position-_playerTransform.position).magnitude<_distance &&_player.magnetState==true) {
             GoToPlayer();

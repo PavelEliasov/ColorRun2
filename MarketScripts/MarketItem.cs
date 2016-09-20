@@ -20,9 +20,9 @@ public class MarketItem : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
     public void CheckItem() {
         switch (Item) {

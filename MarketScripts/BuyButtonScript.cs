@@ -13,9 +13,9 @@ public class BuyButtonScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
     void AnimatePush() {
         animator.SetBool("Pushed",true);

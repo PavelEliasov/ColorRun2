@@ -9,9 +9,9 @@ public class AnimateBanks : MonoBehaviour {
     SpriteRenderer bankSprite;
     MeshRenderer meshrenderer;
 	// Use this for initialization
-	void Start () {
+	//void Start () {
   
-	}
+	//}
 
     void OnEnable() {
        // bankSprite = GetComponent<SpriteRenderer>();
@@ -33,9 +33,9 @@ public class AnimateBanks : MonoBehaviour {
     // Update is called once per frame
 
  
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
 
     void OnTriggerEnter(Collider other) {

@@ -33,9 +33,9 @@ public class DieElement : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
     public void EnableRigidbody() {
         if (_rigidBody!=null) {
             _rigidBody.isKinematic = false;

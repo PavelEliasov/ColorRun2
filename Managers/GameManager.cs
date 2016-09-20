@@ -34,27 +34,33 @@ public class GameManager : MonoBehaviour {
             _totalBanks = value;
         }
     }
-    //public int SpentBanks   {
-    //    get    {
-    //        return _spentBanks;
-    //    }
+    public int SpentBanks
+    {
+        get
+        {
+            return _spentBanks;
+        }
 
-    //    set {
-    //        _spentBanks = value;
-    //    }
-    //}
+        set
+        {
+            _spentBanks = value;
+        }
+    }
 
-    //public int ReceivedBanks  {
-    //    get {
-    //        return _receivedBanks;
-    //    }
+    public int ReceivedBanks
+    {
+        get
+        {
+            return _receivedBanks;
+        }
 
-    //    set {
-    //        _receivedBanks = value;
-    //    }
-    //}
+        set
+        {
+            _receivedBanks = value;
+        }
+    }
 
- 
+
 
 
 
@@ -121,40 +127,47 @@ public class GameManager : MonoBehaviour {
             //PlayerPrefs.SetFloat("EffectsVolume",AudioListener.volume);
             //PlayerPrefs.Set("EffectsVolume", AudioListener.volume);
             PlayerPrefs.SetInt("TotalBanks",_totalBanks);
-            //PlayerPrefs.SetInt("SpentBanks",_spentBanks);
-            //PlayerPrefs.SetInt("RecievedBanks",_receivedBanks);
+            PlayerPrefs.SetInt("SpentBanks",_spentBanks);
+            PlayerPrefs.SetInt("RecievedBanks",_receivedBanks);
         }
         // Debug.Log(SceneManager.GetActiveScene().name);
         if (SceneManager.GetActiveScene().name=="Menu") {
-           // CalculateTotalSumOfBanks();
+            CalculateTotalSumOfBanks();
             Debug.Log("Menu");
         }
 
+
+        Debug.Log(_spentBanks);
+
+        Debug.Log(_receivedBanks);
+
+        Debug.Log(_totalBanks);
+
     }
 	// Use this for initialization
-	void Start () {
-      //  var serial = new Serializer<int, Statistic>();
-        // statistics.Add(1, new Statistic() { Banks=5});
-        // statistics.Add(2, new Statistic());
-        // statistics.Add(3, new Statistic());
-    //    serial.SerializeDictionary(statistics);
-        //// statistics.Clear();
+	//void Start () {
+ //     //  var serial = new Serializer<int, Statistic>();
+ //       // statistics.Add(1, new Statistic() { Banks=5});
+ //       // statistics.Add(2, new Statistic());
+ //       // statistics.Add(3, new Statistic());
+ //   //    serial.SerializeDictionary(statistics);
+ //       //// statistics.Clear();
 
-      //  Debug.Log(serial.Deserialize().Count);
-        //statistics =  serial.Deserialize();
+ //     //  Debug.Log(serial.Deserialize().Count);
+ //       //statistics =  serial.Deserialize();
 
-       // Debug.Log(statistics[1].Banks);
-       // test = new List<Statistic>();
-       // Statistic  st = new Statistic();
-       // st.Banks = 10;
-       // st.Stars = 10;
-       // st.Time = 10;
-       // test.Add(st);
+ //      // Debug.Log(statistics[1].Banks);
+ //      // test = new List<Statistic>();
+ //      // Statistic  st = new Statistic();
+ //      // st.Banks = 10;
+ //      // st.Stars = 10;
+ //      // st.Time = 10;
+ //      // test.Add(st);
        
-      //  Debug.Log(JsonUtility.ToJson(test));
-       // string a = JsonUtility.ToJson(st);
-       // Debug.Log(a);
-	}
+ //     //  Debug.Log(JsonUtility.ToJson(test));
+ //      // string a = JsonUtility.ToJson(st);
+ //      // Debug.Log(a);
+	//}
 
     public void Stats(int scene,Statistic stats) {
 
@@ -165,7 +178,7 @@ public class GameManager : MonoBehaviour {
        
         if (statistics.ContainsKey(scene)) {
             if (stats.Banks>statistics[scene].Banks) {
-                _totalBanks += stats.Banks - statistics[scene].Banks;
+              //  _totalBanks += stats.Banks - statistics[scene].Banks;
                 statistics[scene].Banks = stats.Banks;
                
             }
@@ -190,12 +203,12 @@ public class GameManager : MonoBehaviour {
        // Debug.Log(statistics[1].Banks);
     } 
 	// Update is called once per frame
-	void Update () {
-        if (statistics.ContainsKey(1)) {
-           // Debug.Log(statistics[1].Stars);
-        }
-         // Debug.Log(_selectedScene);
-    }
+	//void Update () {
+ //       if (statistics.ContainsKey(1)) {
+ //          // Debug.Log(statistics[1].Stars);
+ //       }
+ //        // Debug.Log(_selectedScene);
+ //   }
 
     void CalculateTotalSumOfBanks() {
         int sum = 0;

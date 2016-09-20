@@ -23,9 +23,9 @@ public class SettingsController : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
     public void MusicVolume() {
         Managers._audioManager.MusicVolume = musicVolumeSlider.value;

@@ -13,12 +13,12 @@ public class MainMenuController : MonoBehaviour {
 	void Start () {
         audiosource = GetComponent<AudioSource>();
         volume = Managers._audioManager.SoundEffectVolume;
+
+        Debug.Log(Application.targetFrameRate);
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
+
 
     public void PlayButton() {
         PlaySound();
@@ -50,7 +50,7 @@ public class MainMenuController : MonoBehaviour {
 
     }
     IEnumerator Loader(string sceneName) {
-        yield return new WaitForSeconds(0.09f);
+        yield return new WaitForSeconds(0.35f);
         SceneManager.LoadScene(sceneName);
     }
 

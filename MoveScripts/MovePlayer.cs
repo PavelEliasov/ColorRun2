@@ -133,6 +133,8 @@ public class MovePlayer : MonoBehaviour {
 
     // public Material[] aMaterials;
     void Start() {
+        ObjectPool.CreatePool(PaintBall,10);
+
         _postEffect = FindObjectOfType<RippleEffect>();
         Time.timeScale = 1;
         _jumpEffect = JumpEffect.Instance.gameObject;
@@ -348,6 +350,7 @@ public class MovePlayer : MonoBehaviour {
             StartCoroutine(ReturnMagnetState());
         }
         if (other.gameObject.tag == "Flash") {
+            Destroy(other.gameObject);
             _audioController.PlayOneShot(collectflash, _soundEffectVolume);
             flashState = true;
             _postEffect.enabled = true;
@@ -589,7 +592,8 @@ public class MovePlayer : MonoBehaviour {
             return;
         }
         _audioController.PlayOneShot(dropBall, Managers._audioManager.SoundEffectVolume);
-        var ball = Instantiate(PaintBall, playerTrans.position+Vector3.forward*0.5f, Quaternion.identity) as GameObject;
+       // var ball = Instantiate(PaintBall, playerTrans.position+Vector3.forward*0.5f, Quaternion.identity) as GameObject;
+        var ball = ObjectPool.Spawn(PaintBall, playerTrans.position + Vector3.forward * 0.5f, Quaternion.identity);
         ball.GetComponent<PaintBall>().ChangeColor(color, colorName, ballDirect, playerTrans.position);
     }
 

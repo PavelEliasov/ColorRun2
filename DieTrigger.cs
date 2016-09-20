@@ -17,6 +17,9 @@ public class DieTrigger : MonoBehaviour {
         if (other.gameObject.tag=="Player" || other.gameObject.tag=="PlayerDamaged") {
             _controller.Die();
         }
+        if (other.gameObject.tag=="PaintBall") {
+            ObjectPool.Recycle(other.gameObject);
+        }
 
     }
 

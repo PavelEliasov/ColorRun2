@@ -13,10 +13,10 @@ public class EquipmentController : MonoBehaviour {
     MainEquipment[] mainEquipments;
     // Use this for initialization
 
-    void Awake() {
+    //void Awake() {
         
 
-    }
+    //}
     void Start () {
         player = FindObjectOfType<MovePlayer>();
         _playerAnimator = player.GetComponent<Animator>();
@@ -32,9 +32,9 @@ public class EquipmentController : MonoBehaviour {
 	
     
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
     public void Enable_DisableHeadPhones(Image Light) {
         HeadPhones.SetActive(!HeadPhones.activeSelf);
         Light.gameObject.SetActive(!Light.gameObject.activeSelf);

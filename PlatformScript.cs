@@ -232,7 +232,7 @@ public class PlatformScript : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "PaintBall") {
-
+            ObjectPool.Recycle(other.gameObject);
             ChangePlatformColor(other.gameObject.GetComponent<PaintBall>().color);
         }
 

@@ -97,12 +97,12 @@ public class Managers : MonoBehaviour {
         Debug.Log(startedManagerscount+"/"+managers.Count + " managers started");
 
     }
-	void Start () {
+	//void Start () {
 
-        // Debug.Log("Start");
+ //       // Debug.Log("Start");
 
-      // Debug.Log(_gameManager.LevelsComplete);
-	}
+ //     // Debug.Log(_gameManager.LevelsComplete);
+	//}
     void OnEnable() {
      //  Debug.Log(_gameManager.LevelsComplete);
     }
@@ -112,9 +112,9 @@ public class Managers : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
   
 }

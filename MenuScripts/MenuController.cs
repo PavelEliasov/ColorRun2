@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.IO;
 
 public class MenuController : MonoBehaviour {
     [SerializeField]
@@ -21,8 +22,41 @@ public class MenuController : MonoBehaviour {
     AudioClip click;
 
     float volume;
+
+    [SerializeField]
+    TextAsset textAsset;
+    string[] lines; 
+
+
+    public string this[int index] {
+        set {
+            lines[index] = value;
+        }
+
+        get {
+            if (index > lines.Length - 1) {
+                return "";
+            }
+            else {
+                return lines[index];
+            }
+           
+        }
+    }
+
+   void Awake() {
+
+
+        lines = textAsset.text.Split('\n');
+
+    }
 	// Use this for initialization
 	void Start () {
+       
+        foreach (string l in lines) {
+
+            Debug.Log(l);
+        }
         UnityEngine.Time.timeScale = 1;
         totalBanks.text = "X " + Managers._gameManager.TotalBanks.ToString();
         if (Managers._gameManager.statistics.ContainsKey(1) && Managers._gameManager.statistics[1]!=null) {
@@ -33,9 +67,9 @@ public class MenuController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	//void Update () {
 	
-	}
+	//}
 
     public void LoadScene() {
         // Managers._audioManager.SoundEffectVolume = 0.9f;
@@ -50,8 +84,8 @@ public class MenuController : MonoBehaviour {
     public void ResetStats() {
         PlayerPrefs.SetInt("LevelComplete", -1);
         PlayerPrefs.SetInt("TotalBanks", 0);
-        //PlayerPrefs.SetInt("SpentBanks", 0);
-        //PlayerPrefs.SetInt("RecievedBanks", 0);
+        PlayerPrefs.SetInt("SpentBanks", 0);
+        PlayerPrefs.SetInt("RecievedBanks", 0);
         PlayerPrefs.SetString("DicKey",null);
         PlayerPrefs.SetString("DicValue", null);
         PlayerPrefs.SetString("ItemManager", null);

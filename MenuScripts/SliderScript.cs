@@ -7,7 +7,11 @@ using System;
 using DG.Tweening;
 
 public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragHandler,IPointerUpHandler,IPointerClickHandler{
+
+    Sequence textSeq;
+    MenuController menuController;
     public Text Selected_Item_Number;
+    Material textMaterial;
     public static int ElementNumber;
     [Header("Drag Without Buttons")]
     public bool Drag_Only;
@@ -80,6 +84,12 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
     void Start () {
         dragStepHor = (int)Mathf.Round( Screen.width/800f)*4;
 
+        menuController = FindObjectOfType<MenuController>();
+
+        textMaterial = Selected_Item_Number.material;
+
+       // textSeq = DOTween.Sequence();
+        //textSeq.Append(textMaterial.DOColor(new Color(1, 1, 1, 0), 0.9f));
         Debug.Log(Screen.width);
         //testarray = new int[8];
         //for (int i=0;i<testarray.Length;++i) {
@@ -343,8 +353,9 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
 
          //   Debug.Log("Moveright");
             foreach (MoveSlide slide in Slides) {
-
+           
                 slide.StopAllTweens();
+              
             }
             //  DOTween.Clear();
             if (move_right_step >= images.Length) {
@@ -784,10 +795,33 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
    }
 
     void SelectedItem(int i) {
+       // StopCoroutine(ChangeAlfa());
+        
         ElementNumber = i;
-       
+        //textMaterial.DOColor(new Color(1, 1, 1, 0), 0.9f).Pause();
+        //textSeq.Complete();
+        textMaterial.color = new Color(1, 1, 1, 1);
         Managers._gameManager._selectedScene = i;
-        Selected_Item_Number.text = Managers._gameManager._selectedScene.ToString();
+       // Selected_Item_Number.text = Managers._gameManager._selectedScene.ToString();
+        Selected_Item_Number.text = menuController[Managers._gameManager._selectedScene];
+        StartCoroutine(ChangeAlfa());
+       
+        
+    }
+
+    IEnumerator ChangeAlfa() {
+        float i = 0;
+      
+        yield return new WaitForSeconds(0.5f);
+
+        //textSeq.Restart();
+    //  textMaterial.DOColor(new Color(1, 1, 1, 0), 0.9f).SetEase(Ease.OutCirc);
+         textMaterial.color = new Color(1, 1, 1, 0.5f);
+        //while (i <= 1) {
+        //    i += 0.1f;
+        //    textMaterial.color = new Color(1, 1, 1, 1 - i);
+        //    yield return new WaitForSeconds(0.05f);
+        //}
     }
 
     public void OnPointerClick(PointerEventData eventData) {
