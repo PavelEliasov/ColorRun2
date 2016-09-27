@@ -8,6 +8,12 @@ public class PlatformScript : MonoBehaviour {
         green,
         blue
     }
+
+    public enum PlatformType {
+       Default,
+       DestructPlatform,
+       Bounce
+    }
     PlatformColor _platformColor;
 
     public enum AnimateDirection {
@@ -22,6 +28,8 @@ public class PlatformScript : MonoBehaviour {
     }
 
     public AnimateDirection FlyDirection = AnimateDirection.Default;
+
+    public PlatformType _PlatformType = PlatformType.Default;
 
     MeshRenderer _platformMeshRend;
     Transform _platformTrans;
@@ -43,6 +51,10 @@ public class PlatformScript : MonoBehaviour {
 
     bool hide=true;
 
+    [SerializeField]
+    ParticleSystem destructParticle;
+
+    BoxCollider _collider;
     // Use this for initialization
     void Awake() {
        
@@ -59,9 +71,11 @@ public class PlatformScript : MonoBehaviour {
         _playerTrans = player.GetComponent<Transform>();
 
         colorOfPlatform = IdentifyColor(_platformMeshRend.material.color);
-        _platformMeshRend.enabled = false; 
+        _platformMeshRend.enabled = false;
 
-
+        if (_PlatformType==PlatformType.DestructPlatform) {
+            _collider = GetComponent<BoxCollider>();
+        }
      //   Debug.Log(StateManager.playerPos);
 
     }
@@ -102,7 +116,7 @@ public class PlatformScript : MonoBehaviour {
 
     //}
     string IdentifyColor(Color color) {
-        if (color.r >color.g && color.r > color.b) {
+        if (Mathf.Abs(color.g - color.r) > 0.2f && color.r >color.g && color.r > color.b) {
 
             return Colors.Red;
 
@@ -125,7 +139,7 @@ public class PlatformScript : MonoBehaviour {
             return Colors.Black;
 
         }
-        if (color.g - color.r < 0.2f) {
+        if (Mathf.Abs(color.g - color.r) < 0.2f) {
 
             return Colors.Yellow;
 
@@ -182,7 +196,7 @@ public class PlatformScript : MonoBehaviour {
     void ChangePlatformColor(string color) {
         switch (color) {
             case Colors.Red:
-                _platformMeshRend.material = red;
+                _platformMeshRend.sharedMaterial = red;
                 colorOfPlatform = Colors.Red;
                 break;
             case Colors.Green:
@@ -237,16 +251,31 @@ public class PlatformScript : MonoBehaviour {
         }
 
         if (other.gameObject.tag == "Player") {
-            _playerTrans.localRotation = new Quaternion(_platformTrans.rotation.x, 0, 0, 1);// _platformTrans.localRotation.;
+          //  _playerTrans.localRotation = new Quaternion(_platformTrans.rotation.x, 0, 0, 1);// _platformTrans.localRotation.;
+            if (destructParticle!=null && _collider!=null) {
+                destructParticle.GetComponent<Renderer>().sharedMaterial = _platformMeshRend.material;
+                destructParticle.gameObject.SetActive(true);
+                _platformMeshRend.enabled = false;
+                StartCoroutine(DisableCollider());
+               
+            }
+
+            if (_PlatformType==PlatformType.Bounce) {
+                BounceEffect.Instance._bounceEffect.SetActive(true);
+                BounceEffect.Instance._transform.position = _platformTrans.position+Vector3.up*0.5f;
+                Invoke("DisableBounceParticle",1f);
+            }
           //  Debug.Log(colorOfPlatform);
 
            // Debug.Log(player.GetComponent<MovePlayer>().color);
 
             Dust.Instance.gameObject.SetActive(true);
+
             Dust.Instance.gameObject.transform.position = _playerTrans.position + Vector3.forward / 2;
             Dust.Instance._dustMaterial.SetColor("_Color", _platformMeshRend.material.color);
             Invoke("DisableDustParticle", 1f);
 
+           // Debug.Log(player.color);
             if (player.color == colorOfPlatform) {
                 SceneController.Instance.ChangeScore(10);
                   Debug.Log("Equal Of Colors");
@@ -261,6 +290,10 @@ public class PlatformScript : MonoBehaviour {
                
                
             }
+
+            //if (_PlatformType==PlatformType.Bounce) {
+            //    player.Bounce();
+            //}
         }
 
 
@@ -275,6 +308,15 @@ public class PlatformScript : MonoBehaviour {
 
     void DisableDustParticle() {
         Dust.Instance.gameObject.SetActive(false);
+    }
+    void DisableBounceParticle() {
+        BounceEffect.Instance._bounceEffect.SetActive(false);
+    }
+
+
+    IEnumerator DisableCollider() {
+        yield return new WaitForSeconds(0.2f);
+        _collider.enabled = false;
     }
     //void OnControllerColliderHit(ControllerColliderHit other) {
 

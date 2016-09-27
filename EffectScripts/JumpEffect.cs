@@ -3,7 +3,7 @@ using System.Collections;
 
 public class JumpEffect : MonoBehaviour {
     static JumpEffect _instance;
-
+    
     public static JumpEffect Instance
     {
         get
@@ -20,4 +20,6 @@ public class JumpEffect : MonoBehaviour {
 
 
     }
+
+   
 }

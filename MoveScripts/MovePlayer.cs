@@ -40,6 +40,7 @@ public class MovePlayer : MonoBehaviour {
 
     public float _speed;
     public float _jumpForce;
+    float _bounceforce=1.5f;
     public float _gravity;
     float _verticalSpeed;
     float _fallingForce;
@@ -52,6 +53,7 @@ public class MovePlayer : MonoBehaviour {
     bool secondJump = false;
     bool trippleJump = false;
     bool grounded;
+    bool isbounce;
 
     [HideInInspector]
     public BallDirection ballDirect;
@@ -64,6 +66,8 @@ public class MovePlayer : MonoBehaviour {
 
 
     public Material _CharacterMaterial;
+    [SerializeField]
+    Material _trailMaterial;
     public Material _SmokeMaterial;
     public Material red;
     public Material green;
@@ -102,6 +106,8 @@ public class MovePlayer : MonoBehaviour {
     AudioClip collectMagnet;
     [SerializeField]
     AudioClip dropBall;
+    [SerializeField]
+    AudioClip bounceSound;
 
     Vector3 startPos;
     Vector3 movement;
@@ -114,7 +120,11 @@ public class MovePlayer : MonoBehaviour {
     Transform _jumpeffectTrans;
     GameObject _doubleJumpEffect;
     Transform _doubleJumpTrans;
+    GameObject _bounceEffect;
+    Transform _bounceEffectTrans;
 
+
+    bool hold=true;
     public float FallingForce  {
         get     {
             return _fallingForce;
@@ -131,19 +141,34 @@ public class MovePlayer : MonoBehaviour {
         }
     }
 
+    public float VerticalSpeed  {
+        get {
+            return _verticalSpeed;
+        }
+
+        set {
+            _verticalSpeed = value;
+        }
+    }
+
     // public Material[] aMaterials;
     void Start() {
         ObjectPool.CreatePool(PaintBall,10);
 
         _postEffect = FindObjectOfType<RippleEffect>();
         Time.timeScale = 1;
+
+        //-------------Particle Effects------------------
         _jumpEffect = JumpEffect.Instance.gameObject;
         _jumpeffectTrans = _jumpEffect.transform;
         _jumpEffect.SetActive(false);
         _doubleJumpEffect = DoubleJumpEffect.Instance.gameObject;
         _doubleJumpTrans = _doubleJumpEffect.transform;
         _doubleJumpEffect.SetActive(false);
-
+        //_bounceEffect = BounceEffect.Instance.gameObject;
+        //_bounceEffectTrans = BounceEffect.Instance.gameObject.transform;
+        //_bounceEffect.SetActive(false);
+        //-------------///////////////-------------------
         stat = new Statistic();//object for statistic
 
         Smoke.SetActive(false);
@@ -182,7 +207,36 @@ public class MovePlayer : MonoBehaviour {
       //  SmokeFromSkate.SetActive(Managers._itemManager.DressOnSkate);
     }
     string IdentifyColor(Color color) {
-        if (color.r > color.g && color.r > color.b) {
+        //if (color.r > color.g && color.r > color.b) {
+
+        //    return Colors.Red;
+
+        //}
+
+        //if (color.g > color.r && color.g > color.b && color.g - color.r > 0.2f) {
+
+        //    return Colors.Green;
+
+        //}
+
+        //if (color.b > color.g && color.b > color.r) {
+
+        //    return Colors.Blue;
+
+        //}
+
+        //if (color.b < 0.1f && color.g < 0.1f && color.r < 0.1f) {
+
+        //    return Colors.Black;
+
+        //}
+        //if (color.g - color.r < 0.2f) {
+
+        //    return Colors.Yellow;
+
+        //}
+        //return Colors.Yellow;
+        if (Mathf.Abs(color.g - color.r) > 0.2f && color.r > color.g && color.r > color.b) {
 
             return Colors.Red;
 
@@ -205,7 +259,7 @@ public class MovePlayer : MonoBehaviour {
             return Colors.Black;
 
         }
-        if (color.g - color.r < 0.2f) {
+        if (Mathf.Abs(color.g - color.r) < 0.2f) {
 
             return Colors.Yellow;
 
@@ -232,43 +286,72 @@ public class MovePlayer : MonoBehaviour {
                 _audioController.PlayOneShot(jumpsound, _soundEffectVolume);
                
             }
+
+
+            if (isbounce) {
+              
+                if (doubleJump == true) {
+
+                    Debug.Log(_verticalSpeed);
+                    // _verticalSpeed += (_jumpForce - Mathf.Abs(_verticalSpeed) * 2f);
+                    if (_verticalSpeed <= 2) {
+                        _verticalSpeed = _jumpForce;
+                    }
+                    else {
+                        Debug.Log(_verticalSpeed);
+                        // _verticalSpeed = _jumpForce* _bounceforce *(_verticalSpeed/ (_jumpForce * _bounceforce));//double jump force in bounce
+                        // Debug.Log(_verticalSpeed / (_jumpForce * 1.5f));
+                        _verticalSpeed += ((_jumpForce*_bounceforce+_bounceforce*2f)/_verticalSpeed);
+                       Debug.Log(_verticalSpeed);
+                    }
+                   
+                }
+                else {
+                    _verticalSpeed = _jumpForce * _bounceforce;
+                }
+            }
+            else {
+                _verticalSpeed = _jumpForce;
+            }
+
             
+
             doubleJump = false;
 
             animator.SetBool("Jump", true);
-
-
-
-            // jump = true;
-            //  Debug.Log("jump");
-            // playerRigidBody.AddForce(Vector3.up*_jumpForce,ForceMode.Impulse);
-
-
-            //  DustParticle.SetActive(false);
+            
             Smoke.SetActive(true);
 
             if (Managers._itemManager.DressOnSkate) {
              //   SmokeFromSkate.SetActive(false);
             }
            // Time.timeScale = 0.8f;
-            StartCoroutine(ReturnTimeScale());
+           // StartCoroutine(ReturnTimeScale());
             grounded = false;
 
           
            // startPos = playerTrans.position;
             ballDirect = BallDirection.forward;
 
-            _verticalSpeed = _jumpForce;
+
 
 
         }
-    
+        //if (Input.GetMouseButton(0) && hold==true) {
+        //    _verticalSpeed += _jumpForce *5* Time.deltaTime;
+        //    if (_verticalSpeed>=_jumpForce*1.5f) {
+
+        //        Debug.Log("hold");
+        //        hold = false;
+        //    }
+
+        //}
 
         //if (Input.GetAxis("Horizontal")<-0.5f && jump==true || Input.acceleration.x<-0.15f && jump==true) {
         //    jump = false;
         //  //  Time.timeScale = 0.7f;
         //  //  StartCoroutine(ReturnTimeScale());
-          
+
         //    playerTrans.transform.DOMoveX(Mathf.Round( playerTrans.position.x-1),1f);
         //    ballDirect = BallDirection.left;
         //}
@@ -282,6 +365,7 @@ public class MovePlayer : MonoBehaviour {
         //}
 
         if (_charcontroller.isGrounded == false) {
+          
             _verticalSpeed += _gravity *2 * Time.deltaTime;
             FallingForce += Time.deltaTime;
 
@@ -319,7 +403,7 @@ public class MovePlayer : MonoBehaviour {
             secondJump = false;
             grounded = true;
            // _fallingForce = 0;
-           // Debug.Log(grounded);
+            Debug.Log(grounded);
         }
     //   Debug.Log(ballDirect);
 
@@ -348,6 +432,7 @@ public class MovePlayer : MonoBehaviour {
             _audioController.PlayOneShot(collectMagnet, _soundEffectVolume);
             _magnetEffect.SetActive(true);
             StartCoroutine(ReturnMagnetState());
+            Destroy(other.gameObject);
         }
         if (other.gameObject.tag == "Flash") {
             Destroy(other.gameObject);
@@ -368,8 +453,16 @@ public class MovePlayer : MonoBehaviour {
         }
 
         if (other.gameObject.tag=="Ground") {
+            isbounce = false;
             _audioController.PlayOneShot(groundedSounds[Random.Range(0,groundedSounds.Length)],_soundEffectVolume*FallingForce);
             FallingForce = 0;
+        }
+        if (other.gameObject.tag == "BounceGround") {
+            //_bounceEffect.SetActive(true);
+           // StartCoroutine(BounceEffectDisable());
+            _audioController.PlayOneShot(bounceSound, _soundEffectVolume);
+            FallingForce = 0;
+            Bounce();
         }
     }
 
@@ -393,7 +486,10 @@ public class MovePlayer : MonoBehaviour {
                 break;
 
             case State.JetPack:
+
+                
                 if (_charcontroller.isGrounded == false && secondJump == true) {
+                 
                     if (trippleJump==true) {
                         StartCoroutine(SecondJumpEffect());
                         _bootEffect.SetActive(false);
@@ -480,6 +576,7 @@ public class MovePlayer : MonoBehaviour {
                 playerMesh.material = red;
                 _CharacterMaterial.SetColor("_Color", red.color);
                 _SmokeMaterial.SetColor("_TintColor", red.color*new Color(1,1,1,0.7f));
+                _trailMaterial.SetColor("_Color", red.color);
                 
             //    Debug.Log(_SmokeMaterial.color);
                 color = Colors.Red;
@@ -496,14 +593,15 @@ public class MovePlayer : MonoBehaviour {
                 playerMesh.material = yellow;
                 _CharacterMaterial.SetColor("_Color", yellow.color);
                 _SmokeMaterial.SetColor("_TintColor", yellow.color * new Color(1, 1, 1, 0.7f));
-               
-              //  Debug.Log(_SmokeMaterial.color);
+                _trailMaterial.SetColor("_Color", yellow.color);
+                //  Debug.Log(_SmokeMaterial.color);
                 color = Colors.Yellow;
                 break;
             case 10:
                 playerMesh.material = red;
                 _CharacterMaterial.SetColor("_Color", red.color);
                 _SmokeMaterial.SetColor("_TintColor", red.color * new Color(1, 1, 1, 0.7f));
+
 
                 //  Debug.Log(_SmokeMaterial.color);
                 color = Colors.Red;
@@ -532,6 +630,16 @@ public class MovePlayer : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
       //  doubleJumpEffect.SetActive(false);
         _doubleJumpEffect.SetActive(false);
+
+    }
+
+    IEnumerator BounceEffectDisable() {
+        // doubleJumpEffect.SetActive(true);
+        _bounceEffect.SetActive(true);
+        _bounceEffectTrans.position = playerTrans.position + Vector3.forward;
+        yield return new WaitForSeconds(0.5f);
+        //  doubleJumpEffect.SetActive(false);
+        _bounceEffect.SetActive(false);
 
     }
 
@@ -596,6 +704,20 @@ public class MovePlayer : MonoBehaviour {
         var ball = ObjectPool.Spawn(PaintBall, playerTrans.position + Vector3.forward * 0.5f, Quaternion.identity);
         ball.GetComponent<PaintBall>().ChangeColor(color, colorName, ballDirect, playerTrans.position);
     }
+
+
+    public void Bounce() {
+        // Jump();
+        StartCoroutine(JumpAfterGrounded());
+        isbounce = true;
+         //_verticalSpeed = _jumpForce*2f;
+    }
+    IEnumerator JumpAfterGrounded() {
+        //yield return new WaitForSeconds(0.0001f);
+        yield return new WaitUntil(()=> _charcontroller.isGrounded);
+        Jump();
+    }
+  
 
     public void Startagain() {
         // System.GC.Collect();

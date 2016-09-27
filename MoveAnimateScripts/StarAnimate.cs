@@ -17,12 +17,12 @@ public class StarAnimate : MonoBehaviour {
       
         starTrans = GetComponent<Transform>();
        // starTrans.DOMove(new Vector3(100, 270, 100), 1f);
-         StartCoroutine(RotateStar());
+       //  StartCoroutine(RotateStar());
     }
 	
 	// Update is called once per frame
 	void Update () {
-
+        
        // Debug.Log(_player.magnetState);
         //starTrans.DOMove(new Vector3(100, 270, 100), 1f);
      //   starTrans.Rotate(Vector3.up*rotateSpeed*10*Time.deltaTime);

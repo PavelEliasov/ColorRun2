@@ -87,7 +87,7 @@ public class PaintBall : MonoBehaviour {
                 break;
             case BallDirection.forward:
 
-                Debug.Log("ForwardDirection");
+                //Debug.Log("ForwardDirection");
                 break;
 
         }

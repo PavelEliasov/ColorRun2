@@ -46,7 +46,7 @@ public class Serializer <Tkey,Tvalue> {
         _jSonKeysString = PlayerPrefs.GetString("DicKey");
         _jSonvaluesString = PlayerPrefs.GetString("DicValue");
 
-        Debug.Log(PlayerPrefs.GetString("DicKey"));
+       // Debug.Log(PlayerPrefs.GetString("DicKey"));
         if (PlayerPrefs.GetString("DicKey")==null) {
             return null;
         }

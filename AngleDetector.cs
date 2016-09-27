@@ -7,7 +7,7 @@ public class AngleDetector : MonoBehaviour {
 	void Start () {
         platformTrans = GetComponent<Transform>();
 
-        Debug.Log(platformTrans.localRotation);
+      //  Debug.Log(platformTrans.localRotation);
 	}
 	
 	// Update is called once per frame
