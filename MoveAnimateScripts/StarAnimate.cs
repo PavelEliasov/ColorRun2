@@ -37,7 +37,7 @@ public class StarAnimate : MonoBehaviour {
 
 
     void GoToPlayer() {
-        starTrans.DOMove(_playerTransform.position, 4f).SetSpeedBased(true);
+        starTrans.DOMove(_playerTransform.position, 5f).SetSpeedBased(true);
     }
 
     IEnumerator RotateStar() {

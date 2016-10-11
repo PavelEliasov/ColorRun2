@@ -283,7 +283,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
             }
             if (left == true) {
 
-          //   Debug.Log("Moveleft");
+           // Debug.Log("Moveleft");
                 MoveLeft();
             }
 
@@ -304,12 +304,14 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
 
     public void MoveRightButton() {
         if (left == true) return;
+        menuController.TestClick();
         right = true;
 
     }
     public void MoveLeftButton() {
         if (right == true) return;
-      //  Debug.Log(move_right_step);
+        //  Debug.Log(move_right_step);
+        menuController.TestClick();
         left = true;
         //right = !right;
     }
@@ -414,7 +416,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
             slideAllMove = false;
         }
 
-      //  Debug.Log("L");
+       Debug.Log("L");
 
 
         if (imageTransforms[0].localPosition.x == aimagepositions[0] - imagestep) {
@@ -447,7 +449,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
             drag = true;
             left = false;
             slideAllMove = true;
-
+         
             Debug.Log("LeftFinal");
         }
       //  drag = false;
@@ -751,6 +753,7 @@ public class SliderScript : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDra
         }
 
         if (Orient == Orientation.horizontal) {
+            menuController.TestClick();//play sound
             if (drag_start_position.x - drag_end_position.x > dragStepHor && right == false) {
                 left = true;
                 enddrag = true;

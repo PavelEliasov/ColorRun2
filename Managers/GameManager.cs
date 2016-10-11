@@ -87,8 +87,9 @@ public class GameManager : MonoBehaviour {
     Serializer<int,Statistic> serial;
 
     void Awake() {
-        
 
+
+        Debug.Log(Application.runInBackground);
         serial = new Serializer<int, Statistic>();
         if (serial.Deserialize().Count>0) {//check for empty dictionary. If not empty-deserialize
             statistics = serial.Deserialize();
@@ -113,7 +114,7 @@ public class GameManager : MonoBehaviour {
             Managers._audioManager.SoundEffectVolume = 0.8f;
         }
 
-       // CalculateTotalSumOfBanks();
+        CalculateTotalSumOfBanks();
 
     }
 

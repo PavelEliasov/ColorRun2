@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 public class SceneController : MonoBehaviour {
     static SceneController _instance;
+    PortalScript _portal;
+
     [SerializeField]
     Text Time;
     [SerializeField]
@@ -53,7 +55,7 @@ public class SceneController : MonoBehaviour {
 
     [Header("Music")]
     [SerializeField]
-    AudioClip SceneMusic;
+    AudioClip [] _sceneSounds;
  
 
     private DieElement[] dieElements;
@@ -82,9 +84,18 @@ public class SceneController : MonoBehaviour {
             EventSystem.current.pixelDragThreshold = 20;
         }
         if (Managers._audioManager._audioSource!=null) {
-            Managers._audioManager.PlayMusic(SceneMusic);
+            int rand=0;
+            if (_sceneSounds != null) {
+                rand = UnityEngine.Random.Range(0, _sceneSounds.Length);
+
+                if (_sceneSounds[rand] != null) {
+
+                    Managers._audioManager.PlayMusic(_sceneSounds[rand]);
+                }
+            }
+           
         }
-       
+        _portal = FindObjectOfType<PortalScript>();
        
         _player = FindObjectOfType<MovePlayer>();
         _playerAnimator = _player.GetComponent<Animator>();
@@ -159,6 +170,7 @@ public class SceneController : MonoBehaviour {
 
     }
     public void Die() {
+        _player.Die();
         _player.tag = "PlayerDamaged";//set player tag to "Untagged" for disable collisions from platform
         _playerAnimator.enabled = false;
         _player.enabled = false;
@@ -178,7 +190,7 @@ public class SceneController : MonoBehaviour {
        
     }
      void LevelComplete() {
-     
+        _portal.DisablePortal();
         endofLvl = true;
         CountStars();
         stats.Time= UnityEngine.Time.timeSinceLevelLoad;

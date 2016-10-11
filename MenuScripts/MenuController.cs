@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.IO;
+using UnityEngine.EventSystems;
 
 public class MenuController : MonoBehaviour {
     [SerializeField]
@@ -20,6 +21,8 @@ public class MenuController : MonoBehaviour {
     AudioSource audiosource;
     [SerializeField]
     AudioClip click;
+    [SerializeField]
+    AudioClip _slide;
 
     float volume;
 
@@ -52,7 +55,9 @@ public class MenuController : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
-       
+        if (Screen.width > 1920) {
+            EventSystem.current.pixelDragThreshold = 20;
+        }
         foreach (string l in lines) {
 
             Debug.Log(l);
@@ -79,7 +84,7 @@ public class MenuController : MonoBehaviour {
     }
     public void TestClick() {
 
-        Debug.Log("Click");
+        audiosource.PlayOneShot(_slide,volume*0.9f);
     }
     public void ResetStats() {
         PlayerPrefs.SetInt("LevelComplete", -1);
@@ -129,5 +134,7 @@ public class MenuController : MonoBehaviour {
     public void GoToMainMenu() {
         SceneManager.LoadScene("MainMenu");
     }
-
+    public void GoToMovieScene() {
+        SceneManager.LoadScene("movie");
+    }
 }

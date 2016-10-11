@@ -19,12 +19,13 @@ public class CameraFallow : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-     
+
         //  cameraTrans.Translate(new Vector3(cameraTrans.position.x,cameraTrans.position.y,player.transform.position.z));
         // cameraTrans.position = new Vector3(cameraTrans.position.x, Mathf.Lerp(cameraTrans.position.y, player.transform.position.y+1, 0.05f),Mathf.Lerp( cameraTrans.position.z,player.transform.position.z,0.05f));
         // cameraTrans.position = Vector3.Lerp(cameraTrans.position,player.position+Vector3.right*3+Vector3.up*2,0.1f);
         // cameraTrans.position = player.position+Vector3.right*2;
         cameraTrans.DOMoveZ(player.position.z,2f);
+      //  cameraTrans.DOMoveZ(player.position.z+7f, 2f);
         cameraTrans.DOMoveY(player.position.y+1, 2f);
 
     }

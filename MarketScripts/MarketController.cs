@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class MarketController : MonoBehaviour {
     [Header("UI")]
@@ -64,7 +65,9 @@ public class MarketController : MonoBehaviour {
     //    objforEnable.SetActive(true);
     //}
     public void SelectItem(MarketItem item) {
-
+        if (Screen.width > 1920) {
+            EventSystem.current.pixelDragThreshold = 20;
+        }
         DisableAllItems();
 
         priceOfSelectedItem = item.price;

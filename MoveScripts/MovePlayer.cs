@@ -108,6 +108,8 @@ public class MovePlayer : MonoBehaviour {
     AudioClip dropBall;
     [SerializeField]
     AudioClip bounceSound;
+    [SerializeField]
+    AudioClip dieSound;
 
     Vector3 startPos;
     Vector3 movement;
@@ -270,8 +272,10 @@ public class MovePlayer : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-       
 
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            Jump();
+        }
       //  Debug.Log(stat.Stars);
        // Debug.Log(Managers._gameManager);
         //acceleration.text = Input.acceleration.x.ToString();
@@ -459,7 +463,9 @@ public class MovePlayer : MonoBehaviour {
         }
         if (other.gameObject.tag == "BounceGround") {
             //_bounceEffect.SetActive(true);
-           // StartCoroutine(BounceEffectDisable());
+            // StartCoroutine(BounceEffectDisable());
+
+            Debug.Log(_charcontroller.isGrounded);
             _audioController.PlayOneShot(bounceSound, _soundEffectVolume);
             FallingForce = 0;
             Bounce();
@@ -472,7 +478,9 @@ public class MovePlayer : MonoBehaviour {
 
 
     public void Jump() {//Call from JumpButton
-
+        if (Time.timeSinceLevelLoad<0.5f) {
+            return;
+        }
 
         switch (_jumpState) {
 
@@ -576,7 +584,7 @@ public class MovePlayer : MonoBehaviour {
                 playerMesh.material = red;
                 _CharacterMaterial.SetColor("_Color", red.color);
                 _SmokeMaterial.SetColor("_TintColor", red.color*new Color(1,1,1,0.7f));
-                _trailMaterial.SetColor("_Color", red.color);
+                _trailMaterial.SetColor("_Color", red.color * new Color(1, 1, 1, 0.4f));
                 
             //    Debug.Log(_SmokeMaterial.color);
                 color = Colors.Red;
@@ -593,7 +601,7 @@ public class MovePlayer : MonoBehaviour {
                 playerMesh.material = yellow;
                 _CharacterMaterial.SetColor("_Color", yellow.color);
                 _SmokeMaterial.SetColor("_TintColor", yellow.color * new Color(1, 1, 1, 0.7f));
-                _trailMaterial.SetColor("_Color", yellow.color);
+                _trailMaterial.SetColor("_Color", yellow.color * new Color(1, 1, 1, 0.4f));
                 //  Debug.Log(_SmokeMaterial.color);
                 color = Colors.Yellow;
                 break;
@@ -601,7 +609,7 @@ public class MovePlayer : MonoBehaviour {
                 playerMesh.material = red;
                 _CharacterMaterial.SetColor("_Color", red.color);
                 _SmokeMaterial.SetColor("_TintColor", red.color * new Color(1, 1, 1, 0.7f));
-
+                _trailMaterial.SetColor("_Color", red.color * new Color(1, 1, 1, 0.4f));
 
                 //  Debug.Log(_SmokeMaterial.color);
                 color = Colors.Red;
@@ -665,7 +673,7 @@ public class MovePlayer : MonoBehaviour {
     }
 
     IEnumerator ReturnMagnetState() {
-        yield return new WaitForSeconds(Managers._itemManager.Magnet+2);
+        yield return new WaitForSeconds((Managers._itemManager.Magnet+1)*1.5f);
         _magnetEffect.SetActive(false);
         magnetState = false;
     }
@@ -707,15 +715,24 @@ public class MovePlayer : MonoBehaviour {
 
 
     public void Bounce() {
-        // Jump();
-        StartCoroutine(JumpAfterGrounded());
+        // Jump
         isbounce = true;
+        StartCoroutine(JumpAfterGrounded());
+        
          //_verticalSpeed = _jumpForce*2f;
     }
     IEnumerator JumpAfterGrounded() {
         //yield return new WaitForSeconds(0.0001f);
         yield return new WaitUntil(()=> _charcontroller.isGrounded);
-        Jump();
+        if (isbounce) {
+            Jump();
+        }
+       
+    }
+
+    public void Die() {
+
+        _audioController.PlayOneShot(dieSound,_soundEffectVolume);
     }
   
 

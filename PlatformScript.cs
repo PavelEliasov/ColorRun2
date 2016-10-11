@@ -260,10 +260,13 @@ public class PlatformScript : MonoBehaviour {
                
             }
 
-            if (_PlatformType==PlatformType.Bounce) {
+            if (_PlatformType == PlatformType.Bounce) {
                 BounceEffect.Instance._bounceEffect.SetActive(true);
-                BounceEffect.Instance._transform.position = _platformTrans.position+Vector3.up*0.5f;
-                Invoke("DisableBounceParticle",1f);
+                BounceEffect.Instance._transform.position = _platformTrans.position + Vector3.up * 0.5f;
+                Invoke("DisableBounceParticle", 1f);
+            }
+            else {
+                _playerTrans.localRotation = new Quaternion(_platformTrans.rotation.x, 0, 0, 1);// _platformTrans.localRotation.;
             }
           //  Debug.Log(colorOfPlatform);
 
